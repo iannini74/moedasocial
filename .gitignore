@@ -1,0 +1,8 @@
+/storage/*
+!/storage/.htaccess
+!/storage/.gitkeep
+/app/config.local.php
+/moedasocial.config.php
+.DS_Store
+*.log
+/node_modules

@@ -1,0 +1,16 @@
+{
+    "name": "tribex/moedasocial",
+    "description": "Portal MoedaSocial.com — conhecimento sobre moedas sociais e economia circular",
+    "type": "project",
+    "license": "proprietary",
+    "require": {
+        "php": ">=8.1",
+        "anthropic-ai/sdk": "^1.0",
+        "erusev/parsedown": "^1.7",
+        "guzzlehttp/guzzle": "^8.3"
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "sort-packages": true
+    }
+}

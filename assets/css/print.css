@@ -1,0 +1,19 @@
+/* Impressão: relatório de diagnóstico e artigos */
+@page { size: A4; margin: 12mm 12mm 14mm; }
+body { background: #fff !important; font-size: 11.5pt; }
+.site-header, .site-footer, .newsletter-band, .cookie, .ticker, .toc, .aside, .share, .pager, .no-print, .report-actions, .nav-toggle, .ad:not(.rep-ad) { display: none !important; }
+.report-section { background: #fff !important; padding: 0 !important; }
+.report { box-shadow: none !important; padding: 0 !important; max-width: none !important; }
+.rep-kpis { grid-template-columns: repeat(4, 1fr) !important; }
+.rep-recs { grid-template-columns: 1fr 1fr !important; }
+.rep-timeline { grid-template-columns: repeat(3, 1fr) !important; }
+.rep-ad { grid-template-columns: auto 1fr auto !important; }
+.rep-break { break-before: page; }
+.rep-kpi, .rep-recs > div, .rep-ad, .rep-timeline li, tr { break-inside: avoid; }
+* { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+.article-layout { display: block !important; padding: 0 !important; }
+.prose { font-size: 11.5pt; }
+.prose a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 8.5pt; color: #566476; word-break: break-all; }
+.page-hero { padding: 0 0 12px !important; background: none !important; }
+.reveal { opacity: 1 !important; transform: none !important; }
+body.page-diagnostico main > *:not(#relatorio) { display: none !important; }
