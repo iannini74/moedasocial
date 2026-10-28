@@ -497,3 +497,73 @@ legend { font: 700 18px var(--f-display); color: var(--navy); margin-bottom: 14p
 .h-icon.warn { background: var(--warn-bg); color: var(--warn-ink); }
 .btn .icon-sm { margin: 0; vertical-align: 0; }
 .score .dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 6px; vertical-align: 0; background: currentColor; }
+
+/* ===== Página "Por que adotar": ilustrações ===== */
+.vsteps { list-style: none; padding: 0; margin: 18px 0 0; position: relative; display: grid; gap: 14px; }
+.vsteps li { display: flex; gap: 14px; align-items: center; position: relative; }
+.vsteps li:not(:last-child)::after { content: ''; position: absolute; left: 23px; top: 50px; height: 16px; border-left: 2px dashed rgba(143, 227, 198, .5); }
+.vs-icon { width: 48px; height: 48px; flex: none; border-radius: 14px; display: grid; place-items: center; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.14); color: var(--mint); }
+.vsteps strong { display: block; color: #fff; font-size: 15.5px; }
+.vsteps span:not(.vs-icon) { display: block; color: #C7D1DC; font-size: 13.5px; }
+
+.compare { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+@media (max-width: 860px) { .compare { grid-template-columns: 1fr; } }
+.compare-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-xl); padding: 24px; box-shadow: var(--sh-1); }
+.compare-card.best { border: 2px solid var(--green); box-shadow: var(--sh-2); }
+.compare-top { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
+.compare-top h3 { margin: 0; font-size: 19px; }
+.money-bar { display: flex; height: 52px; border-radius: 12px; overflow: hidden; gap: 2px; background: var(--surface); }
+.money-bar span { display: grid; place-items: center; color: #fff; font: 700 16px var(--f-display); }
+.mb-in { background: var(--green-ink); }
+.mb-out { background: #8593A3; }
+.money-legend { list-style: none; padding: 0; margin: 16px 0 0; display: grid; gap: 10px; font-size: 15px; color: var(--ink-2); }
+.money-legend li { display: flex; align-items: flex-start; gap: 8px; }
+.money-legend li .icon-sm { margin-top: 3px; color: var(--muted); }
+.money-legend i { width: 12px; height: 12px; border-radius: 3px; flex: none; margin-top: 6px; }
+.sw-in { background: var(--green-ink); } .sw-out { background: #8593A3; } .sw-again { background: var(--green); }
+.compare-result { margin: 18px 0 0; padding: 12px 14px; border-radius: 12px; font-weight: 600; font-size: 15px; display: flex; gap: 8px; align-items: flex-start; }
+.compare-result .icon-sm { margin-top: 3px; }
+.compare-result.good { background: var(--green-soft); color: var(--green-ink); }
+.compare-result.bad { background: var(--warn-bg); color: var(--warn-ink); }
+.note { font-size: 13.5px; color: var(--muted); margin: 18px auto 0; max-width: 760px; }
+
+.reasons { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+@media (max-width: 760px) { .reasons { grid-template-columns: 1fr; } }
+.reason { display: flex; gap: 16px; align-items: flex-start; background: var(--bg); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 18px 20px; }
+.reason-icon { width: 48px; height: 48px; flex: none; border-radius: 14px; display: grid; place-items: center; background: var(--grad-soft); color: var(--green-ink); }
+.reason h3 { font-size: 17.5px; margin: 2px 0 4px; }
+.reason p { margin: 0; color: var(--ink-2); font-size: 15px; }
+
+.evidence { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-xl); padding: 22px; display: flex; flex-direction: column; gap: 8px; box-shadow: var(--sh-1); }
+.ev-icon { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; background: var(--blue-soft); color: var(--blue-ink); margin-bottom: 4px; }
+.evidence strong { font: 800 30px/1.1 var(--f-display); color: var(--navy); letter-spacing: -.02em; }
+.evidence p { margin: 0; color: var(--ink-2); font-size: 15px; flex: 1; }
+.evidence small { font-size: 12.5px; color: var(--muted); }
+
+.plain-steps { padding-left: 1.2em; margin: 16px 0; display: grid; gap: 10px; color: var(--ink-2); }
+.plain-steps li::marker { color: var(--green-ink); font-weight: 700; }
+.highlight { background: var(--blue-soft); border-radius: 12px; padding: 14px 16px; color: var(--navy); }
+.highlight .icon-sm { color: var(--blue-ink); }
+.ibs-chart { margin: 0; padding: 24px; }
+.ibs-chart h3 { font-size: 18px; margin-bottom: 4px; }
+.ibs-chart figcaption p { margin: 0 0 12px; color: var(--muted); font-size: 14px; }
+.chart-legend { display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: 13.5px; color: var(--ink-2); margin-bottom: 16px; }
+.chart-legend span { display: inline-flex; align-items: center; gap: 8px; }
+.chart-legend i { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
+.ibs-rows { display: grid; gap: 8px; }
+.ibs-row { display: grid; grid-template-columns: 46px 1fr; gap: 10px; align-items: center; }
+.ibs-year { font: 600 13px var(--f-mono); color: var(--ink-2); }
+.ibs-bar { display: flex; gap: 2px; height: 28px; }
+.ibs-bar .seg { display: grid; place-items: center; font: 600 12px var(--f-mono); color: #fff; min-width: 0; }
+.ibs-bar .seg:first-child { border-radius: 4px 0 0 4px; }
+.ibs-bar .seg:last-child { border-radius: 0 4px 4px 0; }
+.ibs-bar .hist { background: #0060E8; }
+.ibs-bar .loc { background: #00A06A; }
+.ibs-row:hover .seg { filter: brightness(1.08); }
+.ibs-chart .chart-source { font-size: 12px; color: var(--muted); margin: 14px 0 0; }
+.icon-list { list-style: none; padding: 0; margin: 14px 0 0; display: grid; gap: 10px; font-size: 15px; color: var(--ink-2); }
+.icon-list li { position: relative; padding-left: 28px; }
+.icon-list li::before { content: ''; position: absolute; left: 0; top: 2px; width: 20px; height: 20px; border-radius: 50%; }
+.icon-list.ok li::before { background: var(--green-soft) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23067A52' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12l5 5L20 7'/%3E%3C/svg%3E") center/12px no-repeat; }
+.icon-list.warn li::before { background: var(--warn-bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238A5406' stroke-width='3' stroke-linecap='round'%3E%3Cpath d='M15 9l-6 6M9 9l6 6'/%3E%3C/svg%3E") center/12px no-repeat; }
+.pros-cons .card h3 { display: flex; align-items: center; gap: 4px; }
