@@ -1,6 +1,9 @@
 <div class="adm-head"><div><h1>Blog</h1>
 <p class="muted">Agente editorial: <?= $hasKey ? 'ativo' : '<b>inativo — configure a chave da API</b>' ?> · intervalo de <?= (int) cfg('ai.blog_interval_days') ?> dias · próximo artigo <?= $due ? '<b>pendente (sai na próxima execução do cron)</b>' : 'ainda não devido' ?></p></div>
-<form method="post" onsubmit="this.querySelector('button').disabled=true;this.querySelector('button').textContent='Gerando… pode levar alguns minutos'"><input type="hidden" name="_csrf" value="<?= e($csrf) ?>"><input type="hidden" name="do" value="gerar"><button class="btn btn-sm btn-primary"<?= $hasKey ? '' : ' disabled' ?>>Gerar artigo agora</button></form></div>
+<div style="display:flex;gap:8px;flex-wrap:wrap">
+<form method="post"><input type="hidden" name="_csrf" value="<?= e($csrf) ?>"><input type="hidden" name="do" value="testar"><button class="btn btn-sm btn-ghost"<?= $hasKey ? '' : ' disabled' ?>>Testar conexão com a OpenAI</button></form>
+<form method="post" onsubmit="if(!confirm('Gerar e publicar um artigo agora? Os inscritos da newsletter serão avisados.'))return false;this.querySelector('button').disabled=true;this.querySelector('button').textContent='Gerando… pode levar alguns minutos'"><input type="hidden" name="_csrf" value="<?= e($csrf) ?>"><input type="hidden" name="do" value="gerar"><button class="btn btn-sm btn-primary"<?= $hasKey ? '' : ' disabled' ?>>Gerar artigo agora</button></form>
+</div></div>
 <?php if ($flash): ?><div class="alert alert-ok"><?= e($flash) ?></div><?php endif; ?>
 <section class="panel"><div class="table-scroll"><table class="adm-table">
 <thead><tr><th>Publicação</th><th>Título</th><th>Origem</th><th>Newsletter</th><th>Status</th><th></th></tr></thead>

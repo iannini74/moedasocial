@@ -206,18 +206,36 @@ TXT;
         throw new RuntimeException('Resposta da redação sem JSON válido.');
     }
 
+    private static string $lastModel = '';
+
+    /** Testa a chave e o acesso aos modelos sem gerar nem publicar artigo. */
+    public static function testConnection(): array
+    {
+        if (!cfg('ai.openai_api_key')) {
+            return ['ok' => false, 'msg' => 'Chave da OpenAI não configurada.'];
+        }
+        try {
+            $res = self::call(['input' => 'Responda apenas com a palavra: ok'], 400);
+            $txt = trim(self::outputText($res));
+            return ['ok' => true, 'msg' => 'Conexão com a OpenAI funcionando. Modelo em uso: ' . self::$lastModel . ($txt !== '' ? ' (resposta: "' . mb_substr($txt, 0, 40) . '")' : '') . '.'];
+        } catch (Throwable $e) {
+            return ['ok' => false, 'msg' => $e->getMessage()];
+        }
+    }
+
     /** Chama a API Responses da OpenAI, tentando os modelos configurados em ordem. */
-    private static function call(array $payload): array
+    private static function call(array $payload, int $maxTokens = 32000): array
     {
         $models = (array) cfg('ai.models', ['gpt-5']);
         $lastError = 'nenhum modelo configurado';
         foreach ($models as $model) {
-            $body = $payload + ['model' => $model, 'max_output_tokens' => 32000, 'store' => false];
+            $body = $payload + ['model' => $model, 'max_output_tokens' => $maxTokens, 'store' => false];
             if (str_starts_with($model, 'gpt-5') || str_starts_with($model, 'o')) {
-                $body['reasoning'] = ['effort' => cfg('ai.reasoning_effort', 'medium')];
+                $body['reasoning'] = ['effort' => $maxTokens < 1000 ? 'low' : cfg('ai.reasoning_effort', 'medium')];
             }
             [$code, $res] = self::post(rtrim((string) cfg('ai.openai_base_url', 'https://api.openai.com/v1'), '/') . '/responses', $body);
             if ($code === 200 && is_array($res)) {
+                self::$lastModel = $model;
                 return $res;
             }
             $err = $res['error'] ?? [];

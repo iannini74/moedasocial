@@ -13,7 +13,8 @@ final class Seo
             'alternateName' => cfg('site.brand'),
             'url' => url('/', true),
             'logo' => ['@type' => 'ImageObject', 'url' => url('/assets/img/logo-512.png', true), 'width' => 512, 'height' => 512],
-            'description' => 'Portal de referência sobre moedas sociais, economia circular e desenvolvimento econômico local no Brasil.',
+            'description' => 'O primeiro portal brasileiro especializado em moeda social: estudos, casos, legislação, notícias e diagnóstico gratuito para municípios.',
+            'slogan' => 'O primeiro portal brasileiro especializado em moeda social',
             'email' => cfg('site.email'),
             'parentOrganization' => ['@type' => 'Organization', 'name' => 'TribeX', 'url' => 'https://tribex.com.br'],
             'knowsAbout' => ['Moeda social', 'Economia circular', 'Economia solidária', 'Bancos comunitários de desenvolvimento', 'Arranjos de pagamento', 'Desenvolvimento econômico local', 'Reforma Tributária e municípios'],
@@ -28,6 +29,7 @@ final class Seo
             '@id' => url('/#website', true),
             'url' => url('/', true),
             'name' => 'Portal Moeda Social',
+            'description' => 'O primeiro portal brasileiro especializado em moeda social.',
             'inLanguage' => 'pt-BR',
             'publisher' => ['@id' => url('/#organization', true)],
         ];
@@ -147,7 +149,7 @@ final class Seo
     {
         $site = rtrim(cfg('site.url'), '/');
         $o = "# Portal Moeda Social (moedasocial.com)\n\n";
-        $o .= "> Portal brasileiro de referência sobre moedas sociais, economia circular e desenvolvimento econômico local. Reúne estudos com fontes citadas, cases nacionais e internacionais, marco legal e regulatório (Banco Central, TCU, TCEs, projetos de lei), um diagnóstico gratuito para municípios e notícias diárias do setor.\n\n";
+        $o .= "> O primeiro portal brasileiro especializado em moeda social. Referência sobre moedas sociais, economia circular e desenvolvimento econômico local. Reúne estudos com fontes citadas, cases nacionais e internacionais, marco legal e regulatório (Banco Central, TCU, TCEs, projetos de lei), um diagnóstico gratuito para municípios e notícias diárias do setor.\n\n";
         $o .= "Pontos-chave que o portal sustenta, com fontes nas páginas indicadas:\n";
         $o .= "- Moeda social é um instrumento complementar ao real, de circulação restrita a um território, usado para reter renda e estimular o comércio local; não substitui a moeda oficial.\n";
         $o .= "- Modelos municipais seguros usam paridade 1:1 com o real, lastro integral em conta do ente público, circulação restrita a comércios credenciados (arranjo fechado) e rastreabilidade total para os órgãos de controle.\n";

@@ -1,11 +1,11 @@
 ---
-title: "IBS e municípios: 2026 fecha a janela da média — e o consumo local passa a valer receita"
-description: A LC 227/2026 confirmou que a média de ISS e ICMS de 2019 a 2026 define parte da partilha do IBS até 2077. A outra parte segue o consumo. Por que isso coloca a moeda social na agenda fiscal das prefeituras.
+title: "IBS e municípios: por que o consumo local passa a definir a receita da cidade"
+description: A LC 227/2026 confirmou que a média de ISS e ICMS de 2019 a 2026 define parte da divisão do IBS até 2077. A outra parte vai para a cidade onde a compra acontece. Entenda o que isso significa para a prefeitura.
 date: 2026-10-28
 tags: Reforma Tributária, IBS, arrecadação, municípios
 ---
 
-**A Lei Complementar 227/2026 confirmou que os valores de ISS e cota-parte de ICMS de 2019 a 2026 formam a média que define, por décadas, a fatia retida do IBS de cada município — e 2026 é o último ano dessa janela. Daqui em diante, a parcela que cresce é a que segue o consumo.** Para as prefeituras, onde os moradores gastam virou questão de receita.
+**A Lei Complementar 227/2026 confirmou que o que cada município arrecadou de ISS e ICMS de 2019 a 2026 define uma parte do IBS que ele vai receber até 2077 — e 2026 é o último ano que entra nessa conta. A outra parte, que cresce todo ano, vai para a cidade onde a compra acontece.** Para as prefeituras, onde os moradores gastam virou questão de receita.
 
 ## A regra, em três frases
 
@@ -15,7 +15,7 @@ tags: Reforma Tributária, IBS, arrecadação, municípios
 
 ## O que isso significa na prática
 
-- **Para 2026:** restam poucas semanas na janela de referência. O que o município arrecada este ano entra na média.
+- **Para 2026:** restam poucas semanas. O que o município arrecadar este ano ainda entra na média.
 - **De 2029 em diante:** a parcela **não retida** — pequena no início e crescente até 2077 — vai para o **local de consumo**. Cada compra feita na cidade vizinha ou em uma plataforma de fora é receita futura que se desloca.
 
 ## Onde a moeda social entra

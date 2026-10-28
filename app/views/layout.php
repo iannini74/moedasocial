@@ -63,7 +63,7 @@ $nav = [
   <div class="wrap header-inner">
     <a class="logo" href="/" aria-label="Portal Moeda Social — página inicial">
       <?php partial('logo') ?>
-      <span class="logo-text"><strong>moeda<span>social</span></strong><small>portal de referência</small></span>
+      <span class="logo-text"><strong>moeda<span>social</span></strong><small>1º portal de moeda social</small></span>
     </a>
     <button class="nav-toggle" aria-expanded="false" aria-controls="menu" aria-label="Abrir menu">
       <span></span><span></span><span></span>
@@ -99,8 +99,8 @@ $nav = [
 <footer class="site-footer">
   <div class="wrap footer-grid">
     <div class="footer-brand">
-      <a class="logo logo-light" href="/"><?php partial('logo') ?><span class="logo-text"><strong>moeda<span>social</span></strong><small>portal de referência</small></span></a>
-      <p>Portal independente de conhecimento sobre moedas sociais, economia circular e desenvolvimento econômico local. Conteúdo com fontes, para gestores públicos, comunidades e empreendedores.</p>
+      <a class="logo logo-light" href="/"><?php partial('logo') ?><span class="logo-text"><strong>moeda<span>social</span></strong><small>1º portal de moeda social</small></span></a>
+      <p><strong style="color:#fff">O primeiro portal brasileiro especializado em moeda social.</strong> Estudos com fontes, casos reais, legislação e notícias sobre moeda social, economia circular e desenvolvimento local, para gestores públicos, comunidades e empreendedores.</p>
       <a class="btn btn-sm btn-ghost-light" href="/contato">Quero implantar no meu município</a>
     </div>
     <div>

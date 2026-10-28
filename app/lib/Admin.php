@@ -177,6 +177,10 @@ final class Admin
                 $r = BlogAgent::run(true);
                 $_SESSION['flash'] = $r['msg'];
                 break;
+            case 'blog:testar':
+                $r = BlogAgent::testConnection();
+                $_SESSION['flash'] = ($r['ok'] ? 'OK — ' : 'Falha — ') . $r['msg'];
+                break;
             case 'blog:status':
                 Db::run('UPDATE posts SET status = ?, updated_at = ? WHERE id = ?', [$_POST['status'] === 'published' ? 'published' : 'draft', time(), $id]);
                 break;

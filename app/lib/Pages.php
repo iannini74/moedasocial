@@ -7,8 +7,8 @@ final class Pages
     {
         view('pages/home', [
             'meta' => [
-                'title' => 'Moeda Social e Economia Circular: guia completo para municípios',
-                'description' => 'Tudo sobre moedas sociais e economia circular no Brasil: estudos com fontes, cases como Mumbuca e Palmas, marco legal, notícias diárias e diagnóstico gratuito para seu município.',
+                'title' => 'Moeda Social: o primeiro portal brasileiro especializado no tema',
+                'description' => 'O primeiro portal brasileiro especializado em moeda social: estudos com fontes, casos como Mumbuca e Palmas, legislação, notícias diárias e diagnóstico gratuito para o seu município.',
                 'path' => '/',
                 'schema' => [],
             ],

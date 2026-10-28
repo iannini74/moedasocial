@@ -12,7 +12,7 @@ return [
     'site' => [
         'name'        => 'Moeda Social',
         'brand'       => 'MoedaSocial.com',
-        'tagline'     => 'Estudos, dados e orientação sobre moeda social para municípios',
+        'tagline'     => 'O primeiro portal brasileiro especializado em moeda social',
         'url'         => 'https://moedasocial.com',
         'locale'      => 'pt_BR',
         'lang'        => 'pt-BR',

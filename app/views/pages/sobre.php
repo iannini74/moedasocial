@@ -1,8 +1,8 @@
 <section class="page-hero"><div class="wrap narrow">
   <?php partial('crumbs', ['items' => ['Sobre' => null]]) ?>
   <p class="kicker">Quem somos</p>
-  <h1>Informação clara sobre moeda social para quem decide e executa políticas públicas</h1>
-  <p class="lead">O Portal Moeda Social reúne, em um só lugar, o que há de mais relevante sobre moedas sociais, economia circular e desenvolvimento econômico local — com fontes, linguagem acessível e foco em quem decide e executa políticas públicas.</p>
+  <h1>O primeiro portal brasileiro especializado em moeda social</h1>
+  <p class="lead">O Portal Moeda Social é o primeiro portal do Brasil dedicado exclusivamente à moeda social. Ele reúne, em um só lugar, o que há de mais relevante sobre moedas sociais, economia circular e desenvolvimento econômico local — com fontes, linguagem acessível e foco em quem decide e executa políticas públicas.</p>
 </div></section>
 <section class="section"><div class="wrap narrow prose">
 <h2 id="missao">Nossa missão</h2>
