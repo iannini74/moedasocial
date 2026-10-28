@@ -103,9 +103,9 @@
   }
 
   var nivel = function (s) {
-    if (s >= 75) return { t: 'Pronto para implantar', c: 'ok', e: '🟢' };
-    if (s >= 45) return { t: 'Quase lá: ajustes pontuais', c: 'mid', e: '🟡' };
-    return { t: 'Em preparação: comece pela base', c: 'low', e: '🟠' };
+    if (s >= 75) return { t: 'Pronto para implantar', c: 'ok' };
+    if (s >= 45) return { t: 'Quase pronto: faltam ajustes pontuais', c: 'mid' };
+    return { t: 'Em preparação: comece pela base legal e orçamentária', c: 'low' };
   };
 
   var recs = {
@@ -113,7 +113,7 @@
     orcamento: ['Garantir a dotação orçamentária', 'Inclua o programa no PPA, na LDO e na LOA, com ação orçamentária própria, e indique a fonte. Despesa obrigatória de caráter continuado exige estimativa de impacto e compensação (LRF, arts. 16 e 17).'],
     programa: ['Aproveitar ou criar um programa de transferência', 'Converter auxílios já existentes (alimentação, aluguel social, bolsas) para moeda social é o caminho mais rápido: o recurso já existe e passa a girar no comércio local.'],
     cadastro: ['Qualificar o cadastro de beneficiários', 'Use o CadÚnico como base, com critérios objetivos de elegibilidade e rotinas de revisão. Isso evita questionamentos sobre impessoalidade.'],
-    comercio: ['Mobilizar o comércio local', 'Envolva associação comercial, CDL e Sala do Empreendedor desde o início. Credenciamento gratuito e recebimento pelo celular, sem maquininha, aceleram a adesão.'],
+    comercio: ['Mobilizar o comércio local', 'Envolva associação comercial, CDL e Sala do Empreendedor desde o início. Credenciamento gratuito e recebimento pelo celular, sem máquina de cartão, aceleram a adesão.'],
     conectividade: ['Planejar a inclusão digital', 'Onde a internet móvel é fraca, prefira soluções com QR Code leve, pontos de atendimento e suporte presencial nos primeiros meses.'],
     equipe: ['Formar a equipe gestora', 'Designe um comitê gestor (Fazenda, Assistência Social, Desenvolvimento Econômico) com metas e painel de indicadores.'],
     controle: ['Estruturar controle e transparência', 'Publique dados agregados do programa, relatórios periódicos e trilha de auditoria. Plataformas digitais com rastreabilidade de ponta a ponta simplificam a prestação de contas.']
@@ -169,7 +169,7 @@
       kpi(brlShort(r.issAdd + r.icmsAdd), 'de arrecadação adicional/ano', 'ISS + cota-parte de ICMS (estimativa conservadora)') +
       kpi(pct(r.pesoOrcamento), 'da receita corrente', 'peso do programa no orçamento municipal') +
     '</div>' +
-    '<p class="rep-note">Leitura: cada <b>R$ 1</b> distribuído em moeda social gera cerca de <b>' + brl(r.lm3m, 2) + '</b> em atividade econômica local nas três primeiras rodadas de gasto, contra <b>' + brl(r.lm3c, 2) + '</b> quando o mesmo valor é pago em dinheiro ou cartão de uso livre — porque hoje cerca de <b>' + d.vazamento + '%</b> do gasto escapa do município.</p></section>' +
+    '<p class="rep-note">Como ler: cada <b>R$ 1</b> distribuído em moeda social gera cerca de <b>' + brl(r.lm3m, 2) + '</b> em atividade econômica no município nas três primeiras rodadas de gasto. O mesmo valor pago em dinheiro ou cartão de uso livre gera cerca de <b>' + brl(r.lm3c, 2) + '</b>, porque hoje cerca de <b>' + d.vazamento + '%</b> do gasto dos moradores é feito fora do município.</p></section>' +
 
     '<section class="rep-sec"><h3>2. Para onde vai o dinheiro: rodadas de gasto</h3>' +
       '<div class="rep-bars">' +
@@ -186,24 +186,24 @@
     '</table></div>' +
     '<p class="rep-note"><b>Reforma Tributária:</b> na transição para o IBS (EC 132/2023 e LC 214/2025), a arrecadação passa a pertencer ao local de consumo. Municípios que retêm o consumo dos seus moradores protegem a própria base tributária nas próximas décadas. Além disso, o movimento adicional fortalece a formalização de pequenos negócios que passam a vender para o programa.</p></section>' +
 
-    '<section class="rep-sec rep-break"><h3>4. Prontidão do município: <span class="score score-' + n.c + '">' + r.score + '/100 · ' + n.e + ' ' + n.t + '</span></h3>' +
+    '<section class="rep-sec rep-break"><h3>4. Prontidão do município: <span class="score score-' + n.c + '">' + r.score + '/100 · <i class="dot"></i>' + n.t + '</span></h3>' +
       '<div class="rep-meter"><span style="width:' + r.score + '%"></span></div>' +
       (feitos.length ? '<p><b>Pontos fortes:</b> ' + feitos.map(function (k) { return fortes[k]; }).join(' · ').replace(/^./, function (c) { return c.toUpperCase(); }) + '.</p>' : '') +
       (faltantes.length ? '<div class="rep-recs">' + faltantes.map(function (k) { return '<div><b>' + recs[k][0] + '</b><p>' + recs[k][1] + '</p></div>'; }).join('') + '</div>' : '<p>Todos os pré-requisitos foram marcados. O município pode avançar diretamente para a contratação da tecnologia e o credenciamento do comércio.</p>') +
       '<p class="rep-note"><b>Fonte de recursos:</b> ' + fontes[d.fonte] + '</p></section>' +
 
     '<section class="rep-sec"><h3>5. Modelo recomendado</h3><ul class="rep-check">' +
-      '<li><b>Moeda 100% digital</b>, com aplicativo e pagamento por QR Code — sem cartão físico e sem maquininha para o comércio.</li>' +
+      '<li><b>Moeda 100% digital</b>, com aplicativo e pagamento por QR Code — sem cartão físico e sem máquina de cartão para o comércio.</li>' +
       '<li><b>Paridade 1:1 com o real e lastro integral</b>, mantido em conta do próprio município em banco parceiro, sem custódia por terceiros.</li>' +
       '<li><b>Arranjo fechado de circulação restrita</b>: aceita apenas por comércios credenciados do município, com resgate em reais direto na conta do lojista.</li>' +
       '<li><b>Rastreabilidade de ponta a ponta</b>, trilha de auditoria e relatórios prontos para o Tribunal de Contas, a LRF e a transparência ativa.</li>' +
       '<li><b>Regras parametrizáveis</b>: públicos, limites, categorias de compra e validade do saldo para estimular a circulação.</li>' +
       '<li><b>Credenciamento gratuito do comércio</b> e <b>nenhum custo fixo de tecnologia</b> para a prefeitura, com remuneração transparente por transação.</li>' +
-      '<li><b>Painel de impacto</b> por bairro e setor: volume retido, comércios ativos, frequência de uso e vazamento evitado.</li>' +
+      '<li><b>Painel de impacto</b> por bairro e setor: volume gasto no município, comércios ativos e frequência de uso.</li>' +
     '</ul></section>' +
 
     '<section class="rep-sec rep-break"><h3>6. Riscos e como mitigá-los</h3><div class="rep-recs">' +
-      riscos.map(function (x) { return '<div><b>⚠️ ' + x[0] + '</b><p>' + x[1] + '</p></div>'; }).join('') + '</div></section>' +
+      riscos.map(function (x) { return '<div><b>' + x[0] + '</b><p>' + x[1] + '</p></div>'; }).join('') + '</div></section>' +
 
     '<section class="rep-sec"><h3>7. Roteiro de implantação sugerido</h3><ol class="rep-timeline">' +
       '<li><span>' + mes(0) + '</span><b>Diagnóstico e desenho</b><p>Validar dados, definir público, valor, fonte e metas; apresentar ao prefeito e à Câmara.</p></li>' +
@@ -224,7 +224,7 @@
     '<aside class="rep-ad" aria-label="Anúncio"><span class="ad-label">Anúncio</span>' +
       '<div><img src="/assets/img/moeda-nobre-192.png" alt="Moeda Nobre" width="56" height="56"></div>' +
       '<div><strong>Transforme este diagnóstico em projeto com a Moeda Nobre.</strong>' +
-      '<p>Moeda social digital municipal: app com QR Code, sem maquininha, lastro 1:1 em conta da prefeitura, rastreabilidade total para o Tribunal de Contas e sem custo de tecnologia para o município.</p>' +
+      '<p>Moeda social digital municipal: app com QR Code, sem máquina de cartão, lastro 1:1 em conta da prefeitura, rastreabilidade total para o Tribunal de Contas e sem custo de tecnologia para o município.</p>' +
       '<p class="rep-ad-url">moedanobre.com · contato@moedanobre.com</p></div>' +
       '<a class="btn btn-light" href="https://moedanobre.com/?utm_source=moedasocial.com&utm_medium=diagnostico&utm_campaign=portal&utm_content=relatorio" target="_blank" rel="sponsored noopener" data-ad-click="diagnostico-relatorio">Agendar demonstração</a>' +
     '</aside>' +
@@ -272,7 +272,7 @@
     var name = 'diagnostico-moeda-social-' + (form.municipio.value || 'municipio').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-') + '.pdf';
     window.msTrack && window.msTrack('simulator_pdf', form.municipio.value);
     if (!window.html2pdf) { window.print(); return; }
-    var btn = this; btn.disabled = true; btn.textContent = 'Gerando PDF…';
+    var btn = this; btn.disabled = true; btn.lastElementChild.textContent = 'Gerando PDF…';
     report.classList.add('pdf-mode');
     window.html2pdf().set({
       margin: [10, 10, 12, 10], filename: name,
@@ -281,7 +281,7 @@
       jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
       pagebreak: { mode: ['css', 'legacy'], before: '.rep-break', avoid: ['.rep-kpi', '.rep-recs > div', '.rep-ad', 'tr', '.rep-timeline li'] }
     }).from(report).save().then(function () {
-      report.classList.remove('pdf-mode'); btn.disabled = false; btn.textContent = '⬇️ Baixar PDF';
+      report.classList.remove('pdf-mode'); btn.disabled = false; btn.lastElementChild.textContent = 'Baixar PDF';
     });
   });
 })();

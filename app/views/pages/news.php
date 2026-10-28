@@ -6,7 +6,7 @@ $pages = max(1, (int) ceil($total / $per)); ?>
     <p class="kicker">Atualizado diariamente</p>
     <h1><?= $cat ? e(News::CATEGORIES[$cat]) : 'Notícias de moeda social, economia solidária e circular' ?></h1>
     <p class="lead">Curadoria automática das principais notícias sobre moedas sociais, bancos comunitários, economia solidária, economia circular e regulação de pagamentos que impacta municípios e comunidades.</p>
-    <?php $last = (int) Db::setting('news_last_fetch'); if ($last): ?><div class="meta-line"><span>🕒 Última atualização: <?= date_br($last, true) ?></span></div><?php endif; ?>
+    <?php $last = (int) Db::setting('news_last_fetch'); if ($last): ?><div class="meta-line"><span><?= icon('clock', 'icon-sm') ?> Última atualização: <?= date_br($last, true) ?></span></div><?php endif; ?>
   </div>
 </section>
 <section class="section">

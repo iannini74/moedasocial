@@ -1,6 +1,6 @@
 <div class="cookie" id="cookie" role="dialog" aria-modal="false" aria-labelledby="cookie-title" hidden>
   <div class="cookie-box">
-    <h2 id="cookie-title">Sua privacidade importa 🍪</h2>
+    <h2 id="cookie-title">Sua privacidade importa</h2>
     <p>Usamos tecnologias essenciais para o portal funcionar e, com a sua permissão, estatísticas para entender quais conteúdos ajudam mais os municípios. Nossa medição própria não usa cookies e nunca guarda seu IP. <a href="/cookies">Saiba mais</a>.</p>
     <div class="cookie-opts" hidden>
       <label class="check"><input type="checkbox" checked disabled> <span><strong>Essenciais</strong> — segurança dos formulários e suas preferências. Sempre ativos.</span></label>

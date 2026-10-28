@@ -4,11 +4,11 @@
  * @var string $placement  @var string $format banner|card|inline|mini|wide
  */
 $ads = [
-    ['h' => 'A riqueza que fica em casa.', 't' => 'Moeda social digital municipal: o benefício circula no comércio da sua cidade e fortalece cada elo da economia local.', 'c' => 'Conheça a Moeda Nobre'],
-    ['h' => 'O dinheiro da sua cidade não precisa de passaporte.', 't' => 'App com pagamento por QR Code. Sem maquininha, sem cartão e sem custo de tecnologia para a prefeitura.', 'c' => 'Ver como funciona'],
-    ['h' => 'Transparência total para sua gestão.', 't' => 'Cada transação rastreada de ponta a ponta, com trilha de auditoria e relatórios prontos para o Tribunal de Contas.', 'c' => 'Agende uma demonstração'],
-    ['h' => 'Reforma Tributária: onde o cidadão gasta, importa.', 't' => 'Com o IBS no destino, manter o consumo na cidade é manter receita. A Moeda Nobre ajuda o dinheiro a não viajar.', 'c' => 'Entenda o impacto'],
-    ['h' => 'Comércio local credenciado de graça.', 't' => 'O celular vira cartão e maquininha. Repasse direto na conta do lojista, com lastro 1:1 em reais.', 'c' => 'Quero conhecer'],
+    ['h' => 'Moeda social digital para prefeituras', 't' => 'Benefícios pagos por aplicativo e aceitos apenas no comércio credenciado do município, com lastro 1:1 em reais.', 'c' => 'Conheça a Moeda Nobre'],
+    ['h' => 'Pagamento por QR Code, sem máquina de cartão', 't' => 'O comércio recebe pelo celular e resgata em reais na própria conta. Sem custo de tecnologia para a prefeitura.', 'c' => 'Ver como funciona'],
+    ['h' => 'Cada transação registrada e auditável', 't' => 'Trilha de auditoria completa e relatórios prontos para o Tribunal de Contas e a LRF.', 'c' => 'Agende uma demonstração'],
+    ['h' => 'Reforma Tributária: o IBS vai para onde o consumo acontece', 't' => 'A Moeda Nobre direciona benefícios municipais para o comércio local e ajuda a proteger a base de arrecadação.', 'c' => 'Entenda o impacto'],
+    ['h' => 'Credenciamento gratuito para o comércio local', 't' => 'Cadastro simples, recebimento pelo celular e repasse direto na conta do lojista.', 'c' => 'Quero conhecer'],
 ];
 static $adSeq = null;
 $adSeq ??= random_int(0, count($ads) - 1);

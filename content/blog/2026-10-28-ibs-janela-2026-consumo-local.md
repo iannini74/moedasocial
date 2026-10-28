@@ -34,7 +34,7 @@ A LC 214/2025 estende o split payment a "arranjos de pagamento, abertos e fechad
 
 ## Próximos passos para a prefeitura
 
-1. Estimar o vazamento de consumo do município;
+1. Estimar quanto do consumo dos moradores é feito fora do município;
 2. Identificar benefícios e pagamentos que já existem e podem circular em moeda social;
 3. Rodar o [diagnóstico gratuito](/diagnostico) e apresentar os resultados ao prefeito e à Secretaria de Fazenda;
 4. Preparar lei municipal e conta-lastro para execução em 2027 — antes do ano eleitoral de 2028.

@@ -23,7 +23,7 @@ final class Newsletter
         }
         $existing = Db::one('SELECT * FROM subscribers WHERE email = ?', [$email]);
         if ($existing && $existing['status'] === 'confirmed') {
-            return ['ok' => true, 'msg' => 'Você já faz parte da nossa lista. Obrigado por continuar com a gente! 💚'];
+            return ['ok' => true, 'msg' => 'Este e-mail já está inscrito. Obrigado por acompanhar o portal.'];
         }
         $token = bin2hex(random_bytes(24));
         $consent = 'Aceite da Política de Privacidade em ' . date('c') . ' via ' . $source;
@@ -41,8 +41,8 @@ final class Newsletter
         $first = $name !== '' ? e(explode(' ', $name)[0]) : 'Olá';
         $link = url('/newsletter/confirmar?t=' . $token, true);
         $html = Mailer::template('Confirme sua inscrição', <<<HTML
-<p>{$first}, que bom ter você por aqui! 👋</p>
-<p>Falta só um passo para você receber, a cada novo artigo, análises práticas sobre <strong>moedas sociais, economia circular e desenvolvimento local</strong> — com casos reais, regulação e caminhos de implantação.</p>
+<p>{$first}, obrigado pela inscrição.</p>
+<p>Confirme seu e-mail para receber, a cada novo artigo, análises práticas sobre <strong>moedas sociais, economia circular e desenvolvimento local</strong> — com casos reais, regulação e caminhos de implantação.</p>
 <p style="text-align:center;margin:28px 0;"><a href="{$link}" style="background:#036B4F;color:#fff;padding:14px 26px;border-radius:12px;text-decoration:none;font-weight:bold;display:inline-block;">Confirmar minha inscrição</a></p>
 <p style="font-size:13px;color:#5b6b66;">Se o botão não funcionar, copie e cole este endereço no navegador:<br>{$link}</p>
 <p style="font-size:13px;color:#5b6b66;">Não pediu esta inscrição? Pode ignorar esta mensagem — sem confirmação, não enviaremos nada.</p>

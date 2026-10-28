@@ -5,11 +5,11 @@ date: 2026-10-14
 tags: cases, Maricá, governança, Tribunal de Contas
 ---
 
-**A Mumbuca, de Maricá, provou que a moeda social pode ter escala — e, entre 2023 e 2025, mostrou também onde os programas tropeçam: na guarda do lastro, nas tarifas sem base legal e na dependência de um único operador.** Para quem está desenhando um programa agora, a crise é um manual gratuito do que fazer e do que evitar.
+**A Mumbuca, de Maricá, provou que a moeda social pode ter escala — e, entre 2023 e 2025, mostrou também onde os programas falham: na guarda do lastro, nas tarifas sem base legal e na dependência de um único operador.** Para quem está desenhando um programa agora, a crise mostra com clareza o que fazer e o que evitar.
 
 ## O que aconteceu, em resumo
 
-Criada pela Lei Municipal 2.448/2013, a Mumbuca tornou-se o trilho de pagamento da Renda Básica de Cidadania de Maricá, que chegou a cerca de 93 mil beneficiários em 2024[^1]. Segundo a prefeitura, a moeda movimenta "aproximadamente meio bilhão de reais por ano"[^2].
+Criada pela Lei Municipal 2.448/2013, a Mumbuca tornou-se o meio de pagamento da Renda Básica de Cidadania de Maricá, que chegou a cerca de 93 mil beneficiários em 2024[^1]. Segundo a prefeitura, a moeda movimenta "aproximadamente meio bilhão de reais por ano"[^2].
 
 Em junho de 2024, o TCE-RJ julgou procedente representação sobre o programa: valores de diversos programas **não estavam segregados** de outros recursos da organização gestora, que já havia recebido mais de R$ 1,16 bilhão. O tribunal determinou conta específica para o lastro, transferência dos rendimentos e fim de "taxas irregulares", com multa diária[^3]. Em setembro de 2025, a prefeitura rescindiu o termo de colaboração e, em outubro, migrou para um aplicativo próprio — com falhas iniciais e redes de varejo suspendendo temporariamente a aceitação[^4][^5].
 

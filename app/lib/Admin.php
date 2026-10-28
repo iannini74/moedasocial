@@ -153,7 +153,7 @@ final class Admin
             'diagnosticos' => view('admin/diagnostics', ['rows' => Db::all('SELECT * FROM diagnostics ORDER BY created_at DESC LIMIT 500'), 'csrf' => $csrf], 'admin/layout'),
             'blog' => view('admin/blog', [
                 'rows' => Db::all('SELECT id, slug, title, status, generated_by, published_at, notified_at FROM posts ORDER BY published_at DESC'),
-                'due' => BlogAgent::due(), 'hasKey' => (bool) cfg('ai.anthropic_api_key'),
+                'due' => BlogAgent::due(), 'hasKey' => (bool) cfg('ai.openai_api_key'),
                 'flash' => $_SESSION['flash'] ?? null, 'csrf' => $csrf,
             ], 'admin/layout'),
             'noticias' => view('admin/news', [

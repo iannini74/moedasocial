@@ -9,7 +9,7 @@ published: 2026-10-28
 keywords: Banco Palmas, Mumbuca, Maricá, Arariboia, Niterói, moeda social municipal, Itajuru, Capivari, Macaíba, TCE-RJ moeda social
 ---
 
-**O Brasil tem dois modelos de moeda social com o mesmo nome: o comunitário, nascido no Banco Palmas em 1998, pequeno e dependente de fomento; e o municipal, inaugurado por Maricá em 2013, que usa a moeda como trilho de pagamento de programas sociais e já movimenta centenas de milhões de reais por ano.** O segundo provou que a moeda social pode ter escala — mas os últimos anos mostraram que, sem lei robusta, lastro bem guardado, contratos sólidos e tecnologia sem dependência, programas podem ser questionados, suspensos ou interrompidos.
+**O Brasil tem dois modelos de moeda social com o mesmo nome: o comunitário, nascido no Banco Palmas em 1998, pequeno e dependente de fomento; e o municipal, inaugurado por Maricá em 2013, que usa a moeda como meio de pagamento de programas sociais e já movimenta centenas de milhões de reais por ano.** O segundo provou que a moeda social pode ter escala — mas os últimos anos mostraram que, sem lei robusta, lastro bem guardado, contratos sólidos e tecnologia sem dependência, programas podem ser questionados, suspensos ou interrompidos.
 
 ## Panorama em números
 
@@ -50,7 +50,7 @@ Fontes: Ipea[^10][^4], Brasil de Fato[^11][^12].
 
 A prefeitura afirma que a moeda movimenta "aproximadamente meio bilhão de reais por ano"[^13]. O programa é financiado por **royalties do petróleo** — Maricá recebeu cerca de R$ 4,7 bilhões em royalties e participação especial em 2024[^14] — e conta com um fundo soberano[^11].
 
-**Tecnologia.** De 2013 a 2017, cartão e maquininhas de uma empresa de benefícios, com taxa de 3% e conversão só após 30 dias — "a moeda tinha apenas um ciclo"[^10]. Em 2018, migração para o E-dinheiro (app e cartão), com taxa de 2% ao comerciante. Os comércios credenciados saltaram de 1.491 (2018) para 12.390 (2021)[^10].
+**Tecnologia.** De 2013 a 2017, cartão e máquinas de cartão de uma empresa de benefícios, com taxa de 3% e conversão só após 30 dias — "a moeda tinha apenas um ciclo"[^10]. Em 2018, migração para o E-dinheiro (app e cartão), com taxa de 2% ao comerciante. Os comércios credenciados saltaram de 1.491 (2018) para 12.390 (2021)[^10].
 
 **Impacto medido.**
 - Estudo do NBER: **renda domiciliar +9%, consumo domiciliar +5%**, sem queda significativa de horas trabalhadas, com efeitos maiores em lares chefiados por mulheres[^15].
@@ -107,7 +107,7 @@ A prefeitura afirma que a moeda movimenta "aproximadamente meio bilhão de reais
 2. **Custos fixos maiores que a receita**: no Banco do Preventório (Niterói), o fundo de crédito foi consumido pelas despesas operacionais e o microcrédito parou em 2016[^42].
 3. **Troca de governo**, quando o banco depende da prefeitura (Capivari)[^1].
 4. **Dependência tecnológica** e custo de TI[^6].
-5. **Moeda de "um ciclo só"**, em que o comerciante converte tudo imediatamente[^10].
+5. **Conversão imediata em reais**, sem uso da moeda entre empresas[^10].
 
 ## 6. As lições, em uma tabela
 

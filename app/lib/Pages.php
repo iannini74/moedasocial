@@ -280,7 +280,7 @@ final class Pages
     {
         $s = Newsletter::confirm((string) ($_GET['t'] ?? ''));
         view('pages/message', ['meta' => ['title' => 'Confirmação de inscrição', 'robots' => 'noindex'],
-            'heading' => $s ? 'Inscrição confirmada! 🎉' : 'Link inválido ou expirado',
+            'heading' => $s ? 'Inscrição confirmada' : 'Link inválido ou expirado',
             'text' => $s ? 'Pronto! Você receberá um aviso sempre que publicarmos um novo artigo. Enviamos um e-mail de boas-vindas com sugestões de leitura.' : 'Não encontramos esta inscrição. Tente se inscrever novamente no rodapé do site.',
             'ok' => (bool) $s]);
     }
@@ -294,7 +294,7 @@ final class Pages
         }
         view('pages/message', ['meta' => ['title' => 'Cancelamento de inscrição', 'robots' => 'noindex'],
             'heading' => $s ? 'Inscrição cancelada' : 'Link inválido',
-            'text' => $s ? 'Você não receberá mais nossos e-mails. Se mudar de ideia, é só se inscrever de novo — as portas estão sempre abertas.' : 'Não encontramos esta inscrição.',
+            'text' => $s ? 'Você não receberá mais nossos e-mails. Se quiser voltar a receber, basta se inscrever novamente.' : 'Não encontramos esta inscrição.',
             'ok' => (bool) $s]);
     }
 }

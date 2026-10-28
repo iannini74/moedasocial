@@ -48,16 +48,28 @@ final class Blog
         ]);
     }
 
-    /** Importa artigos iniciais de content/blog/*.md (apenas uma vez por slug). */
+    /** Importa artigos de content/blog/*.md e atualiza os editoriais quando o arquivo muda. */
     public static function seed(): void
     {
-        if (Db::setting('blog_seeded') === (string) count(glob(CONTENT . '/blog/*.md'))) {
+        $files = glob(CONTENT . '/blog/*.md');
+        $hash = md5(implode('|', array_map(fn($f) => $f . filemtime($f) . filesize($f), $files)));
+        if (Db::setting('blog_seed_hash') === $hash) {
             return;
         }
-        foreach (glob(CONTENT . '/blog/*.md') as $file) {
+        foreach ($files as $file) {
             [$meta, $body] = Content::parse((string) file_get_contents($file));
             $slug = preg_replace('/^\d{4}-\d{2}-\d{2}-/', '', basename($file, '.md'));
-            if (Db::value('SELECT id FROM posts WHERE slug = ?', [$slug])) {
+            $existing = Db::one('SELECT id, body, generated_by FROM posts WHERE slug = ?', [$slug]);
+            if ($existing) {
+                if ($existing['generated_by'] === 'editorial' && $existing['body'] !== $body) {
+                    Db::run(
+                        'UPDATE posts SET title = ?, description = ?, body = ?, tags = ?, sources = ?, faq = ?, reading_min = ?, updated_at = ? WHERE id = ?',
+                        [$meta['title'] ?? $slug, $meta['description'] ?? excerpt($body, 300), $body, $meta['tags'] ?? '',
+                         json_encode(Content::sources($body), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
+                         json_encode(Content::faq($body), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
+                         reading_minutes($body), time(), $existing['id']]
+                    );
+                }
                 continue;
             }
             self::create([
@@ -67,7 +79,7 @@ final class Blog
                 'author' => $meta['author'] ?? cfg('ai.blog_author'),
             ]);
         }
-        Db::setting('blog_seeded', (string) count(glob(CONTENT . '/blog/*.md')));
+        Db::setting('blog_seed_hash', $hash);
     }
 
     public static function related(array $post, int $n = 3): array

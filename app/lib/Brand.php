@@ -12,6 +12,6 @@ final class Brand
     public const ACCENT   = '#8FE3C6'; // menta (botão sobre fundo escuro)
     public const INK      = '#0B1B2B';
     public const AD_BG    = 'linear-gradient(135deg,#00B87A 0%,#0091AE 52%,#0060E8 100%)';
-    public const AD_HEADLINE = 'A riqueza que fica em casa.';
-    public const AD_TEXT  = 'Moeda social digital municipal, 100% rastreável, sem maquininha e sem custo para a prefeitura.';
+    public const AD_HEADLINE = 'Moeda social digital para prefeituras.';
+    public const AD_TEXT  = 'Pagamento por QR Code, lastro 1:1 em reais, registro de cada transação e sem custo de tecnologia para a prefeitura.';
 }

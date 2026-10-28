@@ -24,6 +24,6 @@ return [
     'Poder liberatório' => 'Capacidade de uma moeda de extinguir obrigações por força de lei. A moeda social não tem poder liberatório.',
     'Recirculação' => 'Uso da moeda social recebida por um comerciante para pagar fornecedores, funcionários ou outros comércios locais, em vez de convertê-la em reais.',
     'Split payment' => 'Mecanismo da Reforma Tributária (LC 214/2025) em que o tributo é segregado e recolhido no momento da liquidação do pagamento; alcança inclusive arranjos fechados.',
-    'Vazamento' => 'Parcela da renda local gasta fora do território — em outras cidades, grandes redes ou comércio eletrônico.',
+    'Gasto fora do município (vazamento)' => 'Parcela da renda dos moradores gasta fora do território — em outras cidades, grandes redes ou comércio eletrônico. Em economia, também é chamada de vazamento de renda.',
     'WIR' => 'Sistema suíço de crédito mútuo entre empresas, fundado em 1934, referência mundial em moeda complementar anticíclica.',
 ];

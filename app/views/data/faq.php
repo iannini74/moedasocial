@@ -10,7 +10,7 @@ return [
         ['q' => 'Moeda social é legal no Brasil?', 'a' => 'Sim, quando é instrumento de pagamento de aceitação voluntária, sem curso forçado, com paridade 1:1, lastro integral e circulação restrita. A Nota Jurídica PGBC-5927/2011, do Banco Central, afirma que não compete ao BCB autorizar a emissão de moedas sociais.'],
         ['q' => 'Precisa de autorização do Banco Central?', 'a' => 'A emissão de moeda social, segundo a Nota PGBC-5927/2011, não. Mas a operação de contas pré-pagas e a conversão de reais podem caracterizar atividade de instituição de pagamento; desde a Resolução BCB 494/2025 não existe mais dispensa por volume. Arranjo fechado instituído por lei, lastro em conta do município e operador sem custódia reduzem esse risco.'],
         ['q' => 'Existe lei federal sobre moeda social?', 'a' => 'Não, em outubro de 2026. O principal projeto é o PL 4.476/2023, na CCJC da Câmara. Também tramitam o PL 52/2025 e o PL 227/2025.'],
-        ['q' => 'O município precisa de lei própria?', 'a' => 'Sim. A LRF (art. 26) exige lei específica para destinar recursos a pessoas físicas, e a lei municipal é a principal âncora de segurança jurídica do programa.'],
+        ['q' => 'O município precisa de lei própria?', 'a' => 'Sim. A LRF (art. 26) exige lei específica para destinar recursos a pessoas físicas, e a lei municipal é a principal base de segurança jurídica do programa.'],
         ['q' => 'Pode cobrar taxa do comerciante?', 'a' => 'O TCE-RJ entendeu que tarifas a comerciantes exigem previsão legal. Se houver taxa, ela deve estar prevista expressamente na lei municipal, ser transparente e moderada.'],
     ],
     'Gestão e controle' => [

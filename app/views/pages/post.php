@@ -8,9 +8,9 @@ $tags = array_filter(array_map('trim', explode(',', (string) $post['tags']))); ?
     <h1><?= e($post['title']) ?></h1>
     <p class="lead"><?= e($post['description']) ?></p>
     <div class="meta-line">
-      <span>✍️ <?= e($post['author']) ?></span>
-      <span>📅 <?= date_long_br((int) $post['published_at']) ?></span>
-      <span>📖 <?= (int) $post['reading_min'] ?> min de leitura</span>
+      <span><?= icon('pen', 'icon-sm') ?> <?= e($post['author']) ?></span>
+      <span><?= icon('calendar', 'icon-sm') ?> <?= date_long_br((int) $post['published_at']) ?></span>
+      <span><?= icon('book', 'icon-sm') ?> <?= (int) $post['reading_min'] ?> min de leitura</span>
     </div>
   </div>
 </section>

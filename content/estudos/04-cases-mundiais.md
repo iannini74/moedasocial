@@ -9,7 +9,7 @@ published: 2026-10-28
 keywords: WIR, Chiemgauer, Bristol Pound, Eusko, Sarafu, moeda local Coreia, Sardex, cases moeda social mundo
 ---
 
-**As moedas locais que sobreviveram e cresceram no mundo têm três coisas em comum: um fluxo garantido de dinheiro entrando (um programa público, crédito entre empresas ou um banco comunitário), tecnologia digital barata para o comerciante e lastro claro na moeda oficial.** As que fracassaram eram, em geral, notas de papel de adesão voluntária, sem financiamento estável — e sumiram com o fim do dinheiro vivo.
+**As moedas locais que sobreviveram e cresceram no mundo têm três coisas em comum: uma fonte constante de recursos (um programa público, crédito entre empresas ou um banco comunitário), tecnologia digital barata para o comerciante e lastro claro na moeda oficial.** As que fracassaram eram, em geral, notas de papel de adesão voluntária, sem financiamento estável — e sumiram com o fim do dinheiro vivo.
 
 ## Quadro geral
 
@@ -46,7 +46,7 @@ Lançada em 2012, foi a primeira moeda local do Reino Unido aceita para pagar tr
 
 **Por que falhou:** a diretora do projeto apontou a chegada do Apple Pay e uma tecnologia própria baseada em SMS que ficou obsoleta[^9]; faltou financiamento[^10]. Um estudo acadêmico concluiu que as barreiras à compra local eram institucionais e dificilmente seriam superadas por uma moeda voluntária e conversível[^11].
 
-> **O que não funcionou:** moeda sem fluxo âncora de dinheiro entrando e com tecnologia própria cara de manter. A pessoa precisava *escolher* trocar libras por Bristol Pounds — e poucas escolhiam.
+> **O que não funcionou:** moeda sem uma fonte constante de recursos entrando e com tecnologia própria cara de manter. A pessoa precisava *escolher* trocar libras por Bristol Pounds — e poucas escolhiam.
 
 ## Lewes e Totnes: o fim das moedas de papel
 
@@ -92,11 +92,11 @@ A startup Colu operou moedas locais em Liverpool, Tel Aviv e Haifa. Em novembro 
 
 ## O que o Brasil pode aprender
 
-> **O que funcionou:** fluxo âncora de entrada (programa público, crédito B2B ou banco comunitário); digitalização com baixo custo para o lojista; lastro 1:1; parceria com instituições locais; dados para medir impacto.
+> **O que funcionou:** fonte constante de recursos (programa público, crédito B2B ou banco comunitário); digitalização com baixo custo para o lojista; lastro 1:1; parceria com instituições locais; dados para medir impacto.
 
 > **O que não funcionou:** papel sem fluxo garantido; dependência de líder carismático ou de voluntários; emissão sem controle; startup privada sem salvaguardas para os saldos; financiamento ao sabor da política; concentração do benefício em poucos comércios.
 
-Os municípios brasileiros têm, nesse sentido, uma vantagem: programas de transferência de renda e benefícios que **já existem** podem ser o fluxo âncora, e a infraestrutura de pagamentos instantâneos e celulares já está disseminada. Veja como isso se traduziu no país no estudo sobre [cases brasileiros](/estudos/cases-brasil).
+Os municípios brasileiros têm, nesse sentido, uma vantagem: programas de transferência de renda e benefícios que **já existem** podem ser essa fonte constante de recursos, e a infraestrutura de pagamentos instantâneos e celulares já está disseminada. Veja como isso se traduziu no país no estudo sobre [cases brasileiros](/estudos/cases-brasil).
 
 ## Perguntas frequentes
 

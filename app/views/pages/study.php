@@ -9,9 +9,9 @@ $parts = preg_split('/(?=<h2 id=)/', $html);
     <h1><?= e($study['title']) ?></h1>
     <p class="lead"><?= e($study['description']) ?></p>
     <div class="meta-line">
-      <span>📖 <?= $reading ?> min de leitura</span>
-      <span>🔄 Atualizado em <?= date_br($study['updated']) ?></span>
-      <span>📚 Com fontes citadas</span>
+      <span><?= icon('book', 'icon-sm') ?> <?= $reading ?> min de leitura</span>
+      <span><?= icon('refresh', 'icon-sm') ?> Atualizado em <?= date_br($study['updated']) ?></span>
+      <span><?= icon('file', 'icon-sm') ?> Com fontes citadas</span>
     </div>
   </div>
 </section>

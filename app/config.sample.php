@@ -23,7 +23,8 @@ return [
     ],
 
     'ai' => [
-        'anthropic_api_key' => 'sk-ant-...',  // console.anthropic.com
+        'openai_api_key' => 'sk-...',  // platform.openai.com/api-keys
+        // 'models' => ['gpt-5.2', 'gpt-5'],  // opcional: ordem de preferência
     ],
 
     // Opcional: MySQL em vez de SQLite

@@ -1,7 +1,7 @@
 <section class="page-hero"><div class="wrap narrow">
   <?php partial('crumbs', ['items' => ['Sobre' => null]]) ?>
   <p class="kicker">Quem somos</p>
-  <h1>Conhecimento para fazer o dinheiro circular na sua cidade</h1>
+  <h1>Informação clara sobre moeda social para quem decide e executa políticas públicas</h1>
   <p class="lead">O Portal Moeda Social reúne, em um só lugar, o que há de mais relevante sobre moedas sociais, economia circular e desenvolvimento econômico local — com fontes, linguagem acessível e foco em quem decide e executa políticas públicas.</p>
 </div></section>
 <section class="section"><div class="wrap narrow prose">

@@ -253,3 +253,8 @@ function not_found(): never
     view('pages/404', ['meta' => ['title' => 'Página não encontrada', 'robots' => 'noindex']]);
     exit;
 }
+
+function icon(string $name, string $class = 'icon', int $size = 24): string
+{
+    return Icons::svg($name, $class, $size);
+}

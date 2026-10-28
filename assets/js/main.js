@@ -185,7 +185,7 @@
     b.addEventListener('click', function () {
       var u = b.getAttribute('data-copy');
       (navigator.clipboard ? navigator.clipboard.writeText(u) : Promise.reject()).then(function () {
-        b.textContent = 'Link copiado ✓'; window.msTrack('share', 'copiar');
+        b.textContent = 'Link copiado'; window.msTrack('share', 'copiar');
       }).catch(function () { prompt('Copie o link:', u); });
     });
   });

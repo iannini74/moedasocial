@@ -136,7 +136,7 @@ final class Contact
         $diag = url('/diagnostico?utm_source=autoresposta&utm_medium=email', true);
         $estudos = url('/estudos?utm_source=autoresposta&utm_medium=email', true);
         $html = Mailer::template("Recebemos sua mensagem, {$first}!", <<<HTML
-<p>Obrigado por entrar em contato. É muito bom saber que <strong>{$mun}</strong> está pensando em fazer o dinheiro circular dentro da cidade. 💚</p>
+<p>Obrigado por entrar em contato. Recebemos sua solicitação sobre moeda social para <strong>{$mun}</strong>.</p>
 <p>Sua solicitação já está com nossa equipe de especialistas em moeda social e meios de pagamento. <strong>Vamos responder em até 2 dias úteis</strong> pelo canal que você indicou.</p>
 {$list}
 <p><strong>Como costuma ser a conversa inicial (30 minutos, sem compromisso):</strong></p>

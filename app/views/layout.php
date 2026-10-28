@@ -35,7 +35,7 @@ $nav = [
 <meta property="og:image" content="<?= e(url('/assets/img/og-default.png', true)) ?>">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Portal Moeda Social — conhecimento para fazer o dinheiro circular na sua cidade">
+<meta property="og:image:alt" content="Portal Moeda Social — estudos, dados e diagnóstico gratuito sobre moeda social para municípios">
 <?php if (!empty($meta['published'])): ?><meta property="article:published_time" content="<?= date('c', (int) $meta['published']) ?>"><?php endif; ?>
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="<?= e($meta['title']) ?>">
@@ -63,7 +63,7 @@ $nav = [
   <div class="wrap header-inner">
     <a class="logo" href="/" aria-label="Portal Moeda Social — página inicial">
       <?php partial('logo') ?>
-      <span class="logo-text"><strong>moeda<span>social</span></strong><small>conhecimento que circula</small></span>
+      <span class="logo-text"><strong>moeda<span>social</span></strong><small>portal de referência</small></span>
     </a>
     <button class="nav-toggle" aria-expanded="false" aria-controls="menu" aria-label="Abrir menu">
       <span></span><span></span><span></span>
@@ -99,7 +99,7 @@ $nav = [
 <footer class="site-footer">
   <div class="wrap footer-grid">
     <div class="footer-brand">
-      <a class="logo logo-light" href="/"><?php partial('logo') ?><span class="logo-text"><strong>moeda<span>social</span></strong><small>conhecimento que circula</small></span></a>
+      <a class="logo logo-light" href="/"><?php partial('logo') ?><span class="logo-text"><strong>moeda<span>social</span></strong><small>portal de referência</small></span></a>
       <p>Portal independente de conhecimento sobre moedas sociais, economia circular e desenvolvimento econômico local. Conteúdo com fontes, para gestores públicos, comunidades e empreendedores.</p>
       <a class="btn btn-sm btn-ghost-light" href="/contato">Quero implantar no meu município</a>
     </div>

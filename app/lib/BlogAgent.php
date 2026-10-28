@@ -1,17 +1,14 @@
 <?php
 declare(strict_types=1);
 
-use Anthropic\Client;
-use Anthropic\Core\Exceptions\APIConnectionException;
-use Anthropic\Core\Exceptions\APIStatusException;
-use Anthropic\Core\Exceptions\RateLimitException;
-
 /**
  * Agente editorial: a cada N dias (padrão 15) pesquisa na web e escreve um
  * artigo original, publica no blog, avisa o IndexNow e dispara a newsletter.
  *
+ * Usa a API Responses da OpenAI em duas etapas separadas:
  * Etapa 1 — pesquisa com a ferramenta web_search (fatos recentes + fontes).
  * Etapa 2 — redação com saída estruturada (JSON validado por schema).
+ * Os modelos de ai.models são tentados em ordem caso algum não esteja disponível.
  */
 final class BlogAgent
 {
@@ -47,8 +44,8 @@ final class BlogAgent
         if (!$force && !self::due()) {
             return ['ok' => false, 'msg' => 'Ainda não é hora: o próximo artigo sai ' . cfg('ai.blog_interval_days') . ' dias após o último.'];
         }
-        if (!cfg('ai.anthropic_api_key')) {
-            return ['ok' => false, 'msg' => 'Configure ai.anthropic_api_key para ativar o agente editorial.'];
+        if (!cfg('ai.openai_api_key')) {
+            return ['ok' => false, 'msg' => 'Configure ai.openai_api_key para ativar o agente editorial.'];
         }
         if (Db::setting('blog_agent_lock') && time() - (int) Db::setting('blog_agent_lock') < 1800) {
             return ['ok' => false, 'msg' => 'Uma geração já está em andamento.'];
@@ -56,13 +53,12 @@ final class BlogAgent
         Db::setting('blog_agent_lock', (string) time());
 
         try {
-            $client = new Client(apiKey: cfg('ai.anthropic_api_key'));
             $previous = array_column(Db::all('SELECT title FROM posts ORDER BY published_at DESC LIMIT 25'), 'title');
             $headlines = array_column(News::latest(15), 'title');
             $pillar = self::PILLARS[(int) (time() / 86400 / 15) % count(self::PILLARS)];
 
-            $brief = self::research($client, $pillar, $previous, $headlines);
-            $article = self::write($client, $brief, $previous);
+            $brief = self::research($pillar, $previous, $headlines);
+            $article = self::write($brief, $previous);
 
             $body = trim($article['body_markdown']);
             if (mb_strlen($body) < 3000) {
@@ -83,12 +79,6 @@ final class BlogAgent
             $sent = Newsletter::broadcastPost($post);
             log_line('blog-agent', "Publicado #$id {$post['slug']} — newsletter: $sent envios");
             return ['ok' => true, 'msg' => "Artigo publicado: {$post['title']} ($sent e-mails enviados)", 'id' => $id, 'slug' => $post['slug']];
-        } catch (RateLimitException $e) {
-            return self::fail('Limite de requisições da API atingido; tentaremos na próxima execução. ' . $e->getMessage());
-        } catch (APIStatusException $e) {
-            return self::fail('Erro da API Anthropic (' . ($e->type?->value ?? 'desconhecido') . '): ' . $e->getMessage());
-        } catch (APIConnectionException $e) {
-            return self::fail('Falha de conexão com a API: ' . $e->getMessage());
         } catch (Throwable $e) {
             return self::fail($e->getMessage());
         } finally {
@@ -109,15 +99,16 @@ Você é o editor-chefe do Portal Moeda Social (moedasocial.com), referência br
 
 Linha editorial:
 - Didática e prática: frases claras, exemplos concretos, números com data e fonte. Português do Brasil.
+- Linguagem direta e fácil de entender, mesmo quando persuasiva: sem metáforas, sem slogans, sem frases de efeito e sem emojis. Prefira termos técnicos explicados em palavras simples.
 - Rigor: nunca invente números, leis, decisões ou casos. Todo dado relevante precisa de fonte verificável. Diferencie fato de estimativa.
 - Equilíbrio: mostre o que funciona e o que não funciona, riscos e como mitigá-los.
-- O portal defende, como boas práticas, o modelo que considera mais seguro e eficiente para municípios: moeda social 100% digital (aplicativo com pagamento por QR Code, sem maquininha nem cartão físico), paridade 1:1 com o real e lastro integral mantido em conta do próprio ente fomentador em banco parceiro (sem custódia por terceiros), arranjo de pagamento fechado de circulação restrita aos comércios credenciados do município, rastreabilidade de ponta a ponta com trilha de auditoria e relatórios prontos para o Tribunal de Contas e a LRF, regras parametrizáveis (validade do saldo, limites, públicos), integração com sistemas de PDV, credenciamento gratuito do comércio e nenhum custo de tecnologia para a prefeitura (remuneração por taxa transparente sobre vendas). Ao recomendar soluções, descreva essas características como critérios técnicos — nunca cite marcas, empresas ou produtos comerciais pelo nome.
+- O portal defende, como boas práticas, o modelo que considera mais seguro e eficiente para municípios: moeda social 100% digital (aplicativo com pagamento por QR Code, sem máquina de cartão nem cartão físico), paridade 1:1 com o real e lastro integral mantido em conta do próprio ente fomentador em banco parceiro (sem custódia por terceiros), arranjo de pagamento fechado de circulação restrita aos comércios credenciados do município, rastreabilidade de ponta a ponta com trilha de auditoria e relatórios prontos para o Tribunal de Contas e a LRF, regras parametrizáveis (validade do saldo, limites, públicos), integração com sistemas de PDV, credenciamento gratuito do comércio e nenhum custo de tecnologia para a prefeitura (remuneração por taxa transparente sobre vendas). Ao recomendar soluções, descreva essas características como critérios técnicos — nunca cite marcas, empresas ou produtos comerciais pelo nome.
 - Sempre que pertinente, conecte o tema à Reforma Tributária (IBS no destino do consumo) e à retenção de renda local, sem exageros.
 - Feche com chamada natural para o diagnóstico gratuito (/diagnostico) ou para o contato de apoio à implantação (/contato).
 TXT;
     }
 
-    private static function research(Client $client, string $pillar, array $previous, array $headlines): string
+    private static function research(string $pillar, array $previous, array $headlines): string
     {
         $prev = $previous ? '- ' . implode("\n- ", $previous) : '(nenhum)';
         $news = $headlines ? '- ' . implode("\n- ", $headlines) : '(sem manchetes)';
@@ -139,44 +130,19 @@ Pesquise na web fatos atuais e verificáveis (de preferência fontes primárias:
 3. Pontos de atenção (riscos, controvérsias, decisões de órgãos de controle);
 4. Lista final de fontes (título — URL).
 TXT;
-        $messages = [['role' => 'user', 'content' => $prompt]];
-        $text = '';
-        for ($turn = 0; $turn < 4; $turn++) {
-            $msg = $client->beta->messages->create(
-                model: cfg('ai.model'),
-                maxTokens: 16000,
-                system: self::editorialLine(),
-                messages: $messages,
-                thinking: ['type' => 'adaptive'],
-                outputConfig: ['effort' => 'high'],
-                tools: [[
-                    'type' => 'web_search_20260209', 'name' => 'web_search', 'maxUses' => 12,
-                    'userLocation' => ['type' => 'approximate', 'country' => 'BR', 'timezone' => 'America/Sao_Paulo'],
-                ]],
-                fallbacks: 'default',
-                betas: ['server-side-fallback-2026-07-01'],
-            );
-            if ($msg->stopReason === 'refusal') {
-                throw new RuntimeException('A pesquisa foi recusada pelo modelo.');
-            }
-            foreach ($msg->content as $block) {
-                if ($block->type === 'text') {
-                    $text .= $block->text;
-                }
-            }
-            if ($msg->stopReason !== 'pause_turn') {
-                break;
-            }
-            // Busca longa pausada pelo servidor: devolve o conteúdo e continua
-            $messages[] = ['role' => 'assistant', 'content' => json_decode(json_encode($msg->content), true)];
-        }
+        $res = self::call([
+            'instructions' => self::editorialLine(),
+            'input' => $prompt,
+            'tools' => [['type' => 'web_search', 'user_location' => ['type' => 'approximate', 'country' => 'BR', 'timezone' => 'America/Sao_Paulo']]],
+        ]);
+        $text = self::outputText($res);
         if (mb_strlen(trim($text)) < 500) {
             throw new RuntimeException('Briefing de pesquisa insuficiente.');
         }
         return $text;
     }
 
-    private static function write(Client $client, string $brief, array $previous): array
+    private static function write(string $brief, array $previous): array
     {
         $schema = [
             'type' => 'object',
@@ -225,30 +191,88 @@ Títulos já usados (evite semelhança): {$prevTitles}
 BRIEFING:
 {$brief}
 TXT;
-        $msg = $client->beta->messages->create(
-            model: cfg('ai.model'),
-            maxTokens: 16000,
-            system: self::editorialLine(),
-            messages: [['role' => 'user', 'content' => $prompt]],
-            thinking: ['type' => 'adaptive'],
-            outputConfig: ['effort' => 'high', 'format' => ['type' => 'json_schema', 'schema' => $schema]],
-            fallbacks: 'default',
-            betas: ['server-side-fallback-2026-07-01'],
-        );
-        if ($msg->stopReason === 'refusal') {
-            throw new RuntimeException('A redação foi recusada pelo modelo.');
+        $res = self::call([
+            'instructions' => self::editorialLine(),
+            'input' => $prompt,
+            'text' => ['format' => ['type' => 'json_schema', 'name' => 'artigo', 'strict' => true, 'schema' => $schema]],
+        ]);
+        if (($res['status'] ?? '') === 'incomplete') {
+            throw new RuntimeException('A redação ficou incompleta (' . ($res['incomplete_details']['reason'] ?? 'motivo desconhecido') . ').');
         }
-        if ($msg->stopReason === 'max_tokens') {
-            throw new RuntimeException('A redação excedeu o limite de tokens.');
+        $data = json_decode(self::outputText($res), true);
+        if (is_array($data) && !empty($data['title']) && !empty($data['body_markdown'])) {
+            return $data;
         }
-        foreach ($msg->content as $block) {
-            if ($block->type === 'text') {
-                $data = json_decode($block->text, true);
-                if (is_array($data) && !empty($data['title']) && !empty($data['body_markdown'])) {
-                    return $data;
+        throw new RuntimeException('Resposta da redação sem JSON válido.');
+    }
+
+    /** Chama a API Responses da OpenAI, tentando os modelos configurados em ordem. */
+    private static function call(array $payload): array
+    {
+        $models = (array) cfg('ai.models', ['gpt-5']);
+        $lastError = 'nenhum modelo configurado';
+        foreach ($models as $model) {
+            $body = $payload + ['model' => $model, 'max_output_tokens' => 32000, 'store' => false];
+            if (str_starts_with($model, 'gpt-5') || str_starts_with($model, 'o')) {
+                $body['reasoning'] = ['effort' => cfg('ai.reasoning_effort', 'medium')];
+            }
+            [$code, $res] = self::post(rtrim((string) cfg('ai.openai_base_url', 'https://api.openai.com/v1'), '/') . '/responses', $body);
+            if ($code === 200 && is_array($res)) {
+                return $res;
+            }
+            $err = $res['error'] ?? [];
+            $lastError = "HTTP $code" . (isset($err['message']) ? ': ' . $err['message'] : '');
+            // Modelo inexistente ou sem acesso: tenta o próximo. Outros erros interrompem.
+            $modelProblem = in_array($code, [400, 403, 404], true)
+                && preg_match('/model|does not exist|not found|access/i', (string) ($err['message'] ?? '') . ' ' . ($err['code'] ?? ''));
+            if (!$modelProblem) {
+                break;
+            }
+            log_line('blog-agent', "Modelo $model indisponível ($lastError); tentando o próximo.");
+        }
+        throw new RuntimeException('Erro da API OpenAI — ' . $lastError);
+    }
+
+    private static function post(string $url, array $body): array
+    {
+        $ch = curl_init($url);
+        curl_setopt_array($ch, [
+            CURLOPT_POST => true,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_TIMEOUT => 900,
+            CURLOPT_CONNECTTIMEOUT => 20,
+            CURLOPT_HTTPHEADER => [
+                'Content-Type: application/json',
+                'Authorization: Bearer ' . cfg('ai.openai_api_key'),
+            ],
+            CURLOPT_POSTFIELDS => json_encode($body, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
+        ]);
+        $raw = curl_exec($ch);
+        $code = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $err = curl_error($ch);
+        curl_close($ch);
+        if ($raw === false) {
+            throw new RuntimeException('Falha de conexão com a API OpenAI: ' . $err);
+        }
+        return [$code, json_decode((string) $raw, true)];
+    }
+
+    /** Junta os textos de saída (itens "message" → "output_text"). */
+    private static function outputText(array $res): string
+    {
+        $text = '';
+        foreach ($res['output'] ?? [] as $item) {
+            if (($item['type'] ?? '') !== 'message') {
+                continue;
+            }
+            foreach ($item['content'] ?? [] as $c) {
+                if (($c['type'] ?? '') === 'output_text') {
+                    $text .= $c['text'];
+                } elseif (($c['type'] ?? '') === 'refusal') {
+                    throw new RuntimeException('O modelo recusou a solicitação.');
                 }
             }
         }
-        throw new RuntimeException('Resposta da redação sem JSON válido.');
+        return $text;
     }
 }

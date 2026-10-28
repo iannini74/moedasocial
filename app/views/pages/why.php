@@ -5,7 +5,7 @@
       <?php partial('crumbs', ['items' => ['Por que adotar' => null]]) ?>
       <p class="kicker">Para prefeitos, secretários e vereadores</p>
       <h1>Por que seu município deve adotar uma <span class="grad-text">moeda social</span>?</h1>
-      <p class="lead">Porque cada real que sai da cidade leva junto vendas, empregos e, com a Reforma Tributária, receita. A moeda social é a forma mais direta de fazer o dinheiro público — e o privado — circular primeiro dentro do município, com transparência total.</p>
+      <p class="lead">Quando a renda dos moradores é gasta em outras cidades, o município perde vendas, empregos e, com a Reforma Tributária, receita. A moeda social direciona benefícios e pagamentos públicos para o comércio local e registra cada transação.</p>
       <div class="hero-actions">
         <a class="btn btn-primary btn-lg" href="/diagnostico" data-ev="cta_click" data-ev-label="why-hero-diagnostico">Ver o impacto no meu município</a>
         <a class="btn btn-ghost btn-lg" href="#argumentos">Conhecer os argumentos</a>
@@ -32,19 +32,19 @@
     <div class="grid grid-2">
       <?php
       $args = [
-          ['🔁', 'Renda que fica na cidade', 'Benefícios, auxílios e prêmios pagos em moeda social só podem ser gastos no comércio credenciado do município. A primeira compra é 100% local — e as seguintes tendem a ser também, quando o comerciante paga fornecedores locais na mesma moeda.'],
-          ['🏪', 'Mais vendas para o pequeno comércio', 'Padarias, mercadinhos, farmácias e MEIs passam a receber um fluxo previsível de clientes. Em Barcelona, 95,3% dos comerciantes que aceitaram a moeda local viram aumento de clientes; na Coreia, estabelecimentos credenciados faturaram de 2,9% a 3,4% a mais.'],
-          ['👷', 'Emprego e renda', 'Mais vendas locais sustentam postos de trabalho no comércio e nos serviços. Em Maricá, um estudo estimou emprego formal cerca de 20% acima do esperado até 2019 — e o NBER mediu +9% de renda domiciliar entre beneficiários.'],
-          ['📈', 'Proteção da base tributária', 'Com o IBS cobrado no destino, onde o cidadão compra define cada vez mais a receita municipal até 2077. Reter o consumo é estratégia fiscal de longo prazo — e, enquanto ISS e ICMS existirem, fortalece também o valor adicionado local.'],
-          ['🔍', 'Transparência total', 'Em uma moeda digital, cada transação fica registrada: quem recebeu, onde gastou, em que bairro e setor. Isso facilita a prestação de contas ao Tribunal de Contas, reduz fraudes e permite publicar resultados com dados reais.'],
-          ['🎯', 'Políticas sociais com mais impacto', 'O mesmo orçamento social passa a cumprir dois papéis: proteger famílias e movimentar a economia local. É possível definir categorias de compra (alimentos, medicamentos, material escolar) e validade do saldo.'],
-          ['🏭', 'Atração e fortalecimento de empresas', 'Empresas instaladas no município ganham um mercado local mais ativo; fornecedores locais passam a vender para o comércio que recebe a moeda. Empresas também podem pagar prêmios e benefícios em moeda social, com impacto ESG mensurável.'],
-          ['📱', 'Inclusão financeira e digital', 'Famílias sem conta bancária passam a ter uma carteira digital no celular; comerciantes recebem pagamentos sem maquininha, com QR Code.'],
-          ['♻️', 'Economia circular', 'A moeda social pode remunerar a entrega de recicláveis, óleo e serviços ambientais — transformando resíduo em renda e renda em vendas no comércio do bairro.'],
-          ['🏛️', 'Legado institucional', 'Uma política pública mensurável, inovadora e reconhecida, que coloca o município no mapa das referências nacionais em desenvolvimento local.'],
+          ['repeat', 'A renda é gasta no município', 'Benefícios, auxílios e prêmios pagos em moeda social só podem ser usados no comércio credenciado do município. A primeira compra é 100% local, e as seguintes também tendem a ser quando o comerciante paga fornecedores locais com o saldo.'],
+          ['store', 'Mais vendas para o pequeno comércio', 'Padarias, mercadinhos, farmácias e MEIs passam a receber um fluxo previsível de clientes. Em Barcelona, 95,3% dos comerciantes que aceitaram a moeda local viram aumento de clientes; na Coreia, estabelecimentos credenciados faturaram de 2,9% a 3,4% a mais.'],
+          ['users', 'Emprego e renda', 'Mais vendas locais sustentam postos de trabalho no comércio e nos serviços. Em Maricá, um estudo estimou emprego formal cerca de 20% acima do esperado até 2019 — e o NBER mediu +9% de renda domiciliar entre beneficiários.'],
+          ['trending', 'Proteção da base tributária', 'Com o IBS cobrado no destino, o local onde o morador compra define cada vez mais a receita do município até 2077. Manter o consumo no município é estratégia fiscal de longo prazo e, enquanto ISS e ICMS existirem, aumenta também o valor adicionado local.'],
+          ['search', 'Transparência completa', 'Em uma moeda digital, cada transação fica registrada: quem recebeu, onde gastou, em que bairro e setor. Isso facilita a prestação de contas ao Tribunal de Contas, reduz fraudes e permite publicar resultados com dados reais.'],
+          ['target', 'Políticas sociais com mais resultado', 'O mesmo orçamento social cumpre dois objetivos: proteger famílias e aumentar as vendas no comércio local. É possível definir categorias de compra (alimentos, medicamentos, material escolar) e validade do saldo.'],
+          ['factory', 'Atração e fortalecimento de empresas', 'Empresas instaladas no município passam a ter mais demanda local; fornecedores locais passam a vender para o comércio que recebe a moeda. Empresas também podem pagar prêmios e benefícios em moeda social, com impacto ESG mensurável.'],
+          ['phone', 'Inclusão financeira e digital', 'Famílias sem conta bancária passam a ter uma carteira digital no celular; comerciantes recebem por QR Code, sem máquina de cartão.'],
+          ['leaf', 'Economia circular', 'A moeda social pode pagar pela entrega de recicláveis, óleo e serviços ambientais. Quem recicla recebe renda, e essa renda é gasta no comércio do bairro.'],
+          ['landmark', 'Legado institucional', 'Uma política pública mensurável e inovadora, que coloca o município entre as referências nacionais em desenvolvimento local.'],
       ];
       foreach ($args as $i => [$ic, $t, $d]): ?>
-        <div class="card reveal"><div class="card-icon"><?= $ic ?></div><span class="card-num"><?= str_pad((string) ($i + 1), 2, '0', STR_PAD_LEFT) ?></span><h3><?= e($t) ?></h3><p><?= e($d) ?></p></div>
+        <div class="card reveal"><div class="card-icon"><?= icon($ic) ?></div><span class="card-num"><?= str_pad((string) ($i + 1), 2, '0', STR_PAD_LEFT) ?></span><h3><?= e($t) ?></h3><p><?= e($d) ?></p></div>
       <?php endforeach; ?>
     </div>
   </div>
@@ -54,9 +54,9 @@
   <div class="wrap two-col">
     <div>
       <p class="kicker">Arrecadação e Reforma Tributária</p>
-      <h2>Onde o cidadão gasta passou a importar para o caixa da prefeitura</h2>
+      <h2>O local onde o morador compra passou a definir parte da receita do município</h2>
       <p>Pela Emenda Constitucional 132/2023 e pela Lei Complementar 227/2026, de 2029 a 2077 parte do IBS de cada município é retida e repartida pela <strong>média de ISS e cota-parte de ICMS de 2019 a 2026</strong>. A retenção é de 80% até 2032 e 90% em 2033, caindo 1/45 por ano até 2077. A parte não retida — que só cresce — vai para o <strong>local do consumo</strong>.</p>
-      <p>Na prática: <strong>cada compra feita fora é receita futura que vai para outro município</strong>. A moeda social é a ferramenta mais direta para manter o consumo — e a base tributária — em casa.</p>
+      <p>Na prática: <strong>cada compra feita em outra cidade é receita futura que vai para outro município</strong>. A moeda social é a ferramenta mais direta para manter o consumo e a base tributária no próprio município.</p>
       <a class="btn btn-ghost" href="/estudos/reforma-tributaria-e-municipios">Entender a regra em detalhe</a>
     </div>
     <div class="card">
@@ -78,31 +78,31 @@
     <div class="section-head center">
       <p class="kicker">O modelo que funciona</p>
       <h2>O que separa os programas que prosperam dos que param</h2>
-      <p>A experiência brasileira mostra que o problema nunca foi o conceito — foi a governança. Compare:</p>
+      <p>A experiência brasileira mostra que os problemas vieram da forma de execução, e não do conceito. Compare:</p>
     </div>
     <div class="pros-cons">
       <div class="card card-ok">
-        <h3>✅ Modelo recomendado</h3>
+        <h3><span class="h-icon ok"><?= icon('check-circle') ?></span> Modelo recomendado</h3>
         <ul>
           <li>Lei municipal específica, com tarifas (se houver) previstas em lei</li>
           <li>Lastro 1:1 em <strong>conta do próprio município</strong>, com conciliação diária</li>
           <li>Fornecedor de tecnologia <strong>sem custódia</strong> de recursos</li>
           <li>Arranjo fechado, restrito ao comércio credenciado</li>
-          <li>100% digital, QR Code, sem cartão nem maquininha</li>
+          <li>100% digital, com QR Code, sem cartão nem máquina de cartão</li>
           <li>Trilha de auditoria e relatórios prontos para o TCE</li>
           <li>Portabilidade de dados e saldos garantida em contrato</li>
           <li>Sem custo fixo de tecnologia para a prefeitura</li>
         </ul>
       </div>
       <div class="card card-warn">
-        <h3>⚠️ O que levou programas a serem questionados ou suspensos</h3>
+        <h3><span class="h-icon warn"><?= icon('alert') ?></span> O que levou programas a serem questionados ou suspensos</h3>
         <ul>
           <li>Lastro misturado na conta do operador (TCE-RJ, Maricá)</li>
           <li>Rendimentos do dinheiro público apropriados</li>
           <li>Tarifas cobradas sem previsão legal</li>
           <li>Contratações emergenciais sucessivas</li>
           <li>Dependência de um fornecedor dono do código e dos dados</li>
-          <li>Cartões e maquininhas com custo e baixa recirculação</li>
+          <li>Cartões e máquinas de cartão com custo alto e pouco uso entre empresas</li>
           <li>Cadastro sem cruzamentos (falecidos recebendo)</li>
           <li>Programa criado ou ampliado perto de eleições</li>
         </ul>
@@ -115,14 +115,14 @@
 <section class="section section-cream">
   <div class="wrap">
     <div class="section-head center">
-      <p class="kicker">Para cada público, um ganho</p>
-      <h2>Todo mundo ganha quando o dinheiro gira em casa</h2>
+      <p class="kicker">Benefícios por público</p>
+      <h2>O que cada público ganha</h2>
     </div>
     <div class="grid grid-4">
-      <div class="card"><h3>🏛️ Prefeito(a)</h3><p>Política pública mensurável, transparência de ponta a ponta e legado de inovação.</p></div>
-      <div class="card"><h3>💼 Secretaria de Fazenda</h3><p>Proteção da base tributária na transição para o IBS e dados de consumo local.</p></div>
-      <div class="card"><h3>🏪 Comerciante</h3><p>Mais clientes, recebimento pelo celular, credenciamento simples e resgate na conta.</p></div>
-      <div class="card"><h3>👨‍👩‍👧 Família</h3><p>Benefício digital seguro, compras perto de casa e um comércio local mais forte.</p></div>
+      <div class="card"><div class="card-icon"><?= icon('landmark') ?></div><h3>Prefeito(a)</h3><p>Política pública mensurável, transparência de ponta a ponta e legado de inovação.</p></div>
+      <div class="card"><div class="card-icon"><?= icon('briefcase') ?></div><h3>Secretaria de Fazenda</h3><p>Proteção da base tributária na transição para o IBS e dados de consumo local.</p></div>
+      <div class="card"><div class="card-icon"><?= icon('store') ?></div><h3>Comerciante</h3><p>Mais clientes, recebimento pelo celular, credenciamento simples e resgate na própria conta.</p></div>
+      <div class="card"><div class="card-icon"><?= icon('users') ?></div><h3>Família</h3><p>Benefício digital seguro, compras no comércio do bairro e mais oferta perto de onde mora.</p></div>
     </div>
   </div>
 </section>

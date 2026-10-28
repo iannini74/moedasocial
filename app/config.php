@@ -12,7 +12,7 @@ return [
     'site' => [
         'name'        => 'Moeda Social',
         'brand'       => 'MoedaSocial.com',
-        'tagline'     => 'Conhecimento para fazer o dinheiro circular na sua cidade',
+        'tagline'     => 'Estudos, dados e orientação sobre moeda social para municípios',
         'url'         => 'https://moedasocial.com',
         'locale'      => 'pt_BR',
         'lang'        => 'pt-BR',
@@ -69,8 +69,11 @@ return [
     'cron_token' => '',
 
     'ai' => [
-        'anthropic_api_key' => '',
-        'model'             => 'claude-opus-5-5',
+        // Agente editorial do blog — API Responses da OpenAI
+        'openai_api_key'    => '',
+        // Tentados em ordem: se um modelo não estiver disponível na conta, usa o seguinte
+        'models'            => ['gpt-5.2', 'gpt-5.1', 'gpt-5', 'gpt-4.1'],
+        'reasoning_effort'  => 'medium',
         'blog_interval_days'=> 15,
         'blog_author'       => 'Redação Moeda Social',
     ],

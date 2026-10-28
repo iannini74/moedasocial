@@ -6,7 +6,7 @@ Guia passo a passo para publicar o portal em **moedasocial.com** (hospedagem com
 
 - PHP **8.1 ou superior** (recomendado 8.3), com extensões `pdo_sqlite` (ou `pdo_mysql`), `curl`, `mbstring`, `openssl` — todas ativas por padrão na Hostinger.
 - Uma caixa de e-mail `contato@moedasocial.com` criada no hPanel (para envio via SMTP).
-- Chave da API da Anthropic (console.anthropic.com) para o agente editorial do blog.
+- Chave da API da OpenAI (platform.openai.com/api-keys) para o agente editorial do blog.
 
 A pasta `vendor/` já vai no repositório: **não é preciso rodar Composer no servidor**.
 
@@ -26,7 +26,7 @@ A pasta `vendor/` já vai no repositório: **não é preciso rodar Composer no s
    - `admin.password_hash`: gere em **Avançado → Terminal (SSH)** com
      `php -r "echo password_hash('SUA_SENHA_FORTE', PASSWORD_DEFAULT);"`;
    - `mail.smtp_user` / `mail.smtp_pass`: a caixa `contato@moedasocial.com`;
-   - `ai.anthropic_api_key`: sua chave da Anthropic;
+   - `ai.openai_api_key`: sua chave da OpenAI;
    - `seo.indexnow_key`: `php -r "echo bin2hex(random_bytes(16));"`.
 3. Permissões: a pasta `public_html/storage` precisa ser gravável (755 já basta na Hostinger).
 

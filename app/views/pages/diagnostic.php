@@ -5,7 +5,7 @@
     <p class="kicker">Ferramenta gratuita para prefeituras</p>
     <h1>Diagnóstico de moeda social para o seu município</h1>
     <p class="lead">Preencha os dados abaixo — muitos já vêm estimados pela população e podem ser ajustados com números da sua Secretaria de Fazenda. Em segundos você recebe o impacto estimado, a nota de prontidão, os riscos e o roteiro de implantação, pronto para imprimir ou salvar em PDF.</p>
-    <div class="meta-line"><span>⏱️ 3 minutos</span><span>🔒 Não pedimos dados pessoais</span><span>🖨️ Relatório em PDF</span></div>
+    <div class="meta-line"><span><?= icon('clock', 'icon-sm') ?> 3 minutos</span><span><?= icon('lock', 'icon-sm') ?> Não pedimos dados pessoais</span><span><?= icon('printer', 'icon-sm') ?> Relatório em PDF</span></div>
   </div>
 </section>
 
@@ -86,10 +86,10 @@
 <section id="relatorio" class="section report-section" hidden>
   <div class="wrap">
     <div class="report-actions no-print">
-      <button class="btn btn-primary" type="button" id="btn-pdf">⬇️ Baixar PDF</button>
-      <button class="btn btn-ghost" type="button" id="btn-print">🖨️ Imprimir</button>
+      <button class="btn btn-primary" type="button" id="btn-pdf"><?= icon('download', 'icon-sm') ?> <span>Baixar PDF</span></button>
+      <button class="btn btn-ghost" type="button" id="btn-print"><?= icon('printer', 'icon-sm') ?> Imprimir</button>
       <a class="btn btn-ghost" id="btn-contact" href="/contato">Falar com especialistas</a>
-      <button class="btn btn-ghost" type="button" id="btn-edit">✏️ Ajustar dados</button>
+      <button class="btn btn-ghost" type="button" id="btn-edit"><?= icon('edit', 'icon-sm') ?> Ajustar dados</button>
     </div>
     <div id="report" class="report"></div>
   </div>

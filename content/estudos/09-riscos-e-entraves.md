@@ -35,7 +35,7 @@ keywords: riscos moeda social, Resolução BCB 494, PL 4476 riscos, lastro moeda
 
 Além dos riscos regulatórios, há os que corroem o programa por dentro:
 
-- **"Um ciclo só":** quando o comerciante converte tudo em reais no mesmo dia, a moeda não recircula e o efeito multiplicador encolhe. Em Maricá, antes da digitalização, isso era a regra[^17].
+- **Conversão imediata em reais:** quando o comerciante converte tudo em reais no mesmo dia, a moeda deixa de ser usada entre empresas e o efeito multiplicador diminui. Em Maricá, antes da digitalização, isso era a regra[^17].
 - **Rede comercial rala:** se poucos comércios aceitam, o beneficiário se frustra e a moeda perde valor percebido.
 - **Tecnologia instável:** falhas de aplicativo em transições, como em Maricá em outubro de 2025, fazem grandes redes suspenderem a aceitação[^18].
 - **Custo de TI maior que a receita:** foi o que levou à saída de fornecedores no passado[^19].

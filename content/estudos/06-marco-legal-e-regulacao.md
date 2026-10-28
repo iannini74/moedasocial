@@ -92,15 +92,15 @@ O meio de pagamento não muda o fato gerador: o comércio que recebe em moeda so
 
 ## Checklist de legalidade para o município
 
-- ✅ Lei municipal específica: objetivos, público, valores, fonte de recursos, paridade 1:1, lastro integral, circulação restrita, regras de resgate, **tarifas** (se houver), governança, transparência e avaliação;
-- ✅ Decreto regulamentador e dotação orçamentária com estimativa de impacto (LRF);
-- ✅ Lastro em **conta específica do município** em instituição financeira (oficial, salvo previsão legal), com conciliação diária e rendimentos ao programa;
-- ✅ Contas digitais nominativas; nada de cédulas ao portador;
-- ✅ Fornecedor de tecnologia sem custódia de recursos; contrato com portabilidade de dados e plano de saída;
-- ✅ Aceitação voluntária pelos comércios, com credenciamento formal;
-- ✅ KYC, prevenção a fraudes e lavagem; LGPD;
-- ✅ Transparência ativa e relatórios ao controle interno e ao Tribunal de Contas;
-- ✅ Calendário: lei e execução **antes** do ano eleitoral.
+- Lei municipal específica: objetivos, público, valores, fonte de recursos, paridade 1:1, lastro integral, circulação restrita, regras de resgate, **tarifas** (se houver), governança, transparência e avaliação;
+- Decreto regulamentador e dotação orçamentária com estimativa de impacto (LRF);
+- Lastro em **conta específica do município** em instituição financeira (oficial, salvo previsão legal), com conciliação diária e rendimentos ao programa;
+- Contas digitais nominativas; nada de cédulas ao portador;
+- Fornecedor de tecnologia sem custódia de recursos; contrato com portabilidade de dados e plano de saída;
+- Aceitação voluntária pelos comércios, com credenciamento formal;
+- KYC, prevenção a fraudes e lavagem; LGPD;
+- Transparência ativa e relatórios ao controle interno e ao Tribunal de Contas;
+- Calendário: lei e execução **antes** do ano eleitoral.
 
 ## Perguntas frequentes
 

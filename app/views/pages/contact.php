@@ -23,7 +23,7 @@ $prefill = e((string) ($_GET['municipio'] ?? ''));
     <div>
       <?php if ($ok): ?>
         <div class="message-box" style="margin:0">
-          <div class="icon">💚</div>
+          <div class="icon"><?= icon('check-circle', 'icon', 34) ?></div>
           <h2>Mensagem recebida, <?= e(explode(' ', (string) ($state['name'] ?? ''))[0]) ?>!</h2>
           <p>Seu protocolo é <strong><?= e($state['protocol'] ?? '') ?></strong>. Enviamos uma confirmação para o seu e-mail com os próximos passos — se não encontrar, confira a caixa de spam.</p>
           <p class="muted">Enquanto isso, que tal adiantar o <a href="/diagnostico">diagnóstico gratuito do seu município</a>? Ele deixa a nossa conversa muito mais produtiva.</p>
@@ -90,7 +90,7 @@ $prefill = e((string) ($_GET['municipio'] ?? ''));
             <?= $fe('consent') ?>
             <label class="check"><input type="checkbox" name="newsletter" value="1" checked> <span>Quero receber os novos artigos do portal por e-mail (opcional).</span></label>
             <button class="btn btn-primary btn-lg" type="submit">Enviar solicitação</button>
-            <p class="muted" style="font-size:13px;margin:0">🔒 Seus dados são usados apenas para este atendimento. Você pode pedir a exclusão a qualquer momento.</p>
+            <p class="muted" style="font-size:13px;margin:0"><?= icon('lock', 'icon-sm') ?> Seus dados são usados apenas para este atendimento. Você pode pedir a exclusão a qualquer momento.</p>
           </div>
         </form>
       <?php endif; ?>

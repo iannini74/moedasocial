@@ -29,7 +29,7 @@
 <li><strong>ipwho.is</strong> — consulta de localização aproximada (cidade/estado/país) a partir do IP, sem armazenamento do IP por nós;</li>
 <li><strong>Google Fonts</strong> e <strong>Cloudflare cdnjs</strong> — fornecimento de fontes e bibliotecas técnicas, que recebem seu IP ao carregar a página;</li>
 <li><strong>Google Analytics 4</strong> — somente se você consentir com estatísticas e se a ferramenta estiver ativada;</li>
-<li><strong>Anthropic</strong> — o agente editorial usa inteligência artificial para pesquisar e redigir artigos; <strong>nenhum dado pessoal de visitantes é enviado</strong>.</li>
+<li><strong>OpenAI</strong> — o agente editorial usa inteligência artificial para pesquisar e redigir artigos; <strong>nenhum dado pessoal de visitantes é enviado</strong>.</li>
 </ul>
 <p>Alguns desses fornecedores podem tratar dados fora do Brasil. Nesses casos, a transferência internacional ocorre conforme o art. 33 da LGPD e a regulamentação da ANPD, com cláusulas contratuais e medidas de segurança. Também poderemos compartilhar dados para cumprir obrigação legal ou ordem de autoridade competente.</p>
 

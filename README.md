@@ -6,7 +6,7 @@ Portal de conhecimento sobre moedas sociais, economia circular e desenvolvimento
 
 - **Estudos** (Markdown em `content/estudos/`): conceito, economia circular, finalidades, cases mundiais e brasileiros, marco legal, TCU/TCEs e juristas, projetos de lei e autoridades, riscos, Reforma Tributária e roteiro de implantação — todos com fontes citadas.
 - **Notícias diárias** agregadas de fontes públicas (`app/lib/News.php`, feeds em `app/config.php`).
-- **Blog** com agente editorial (Claude, com pesquisa na web) que publica a cada 15 dias e avisa a newsletter (`app/lib/BlogAgent.php`). Artigos iniciais em `content/blog/`.
+- **Blog** com agente editorial (OpenAI, com pesquisa na web) que publica a cada 15 dias e avisa a newsletter (`app/lib/BlogAgent.php`). Artigos iniciais em `content/blog/`.
 - **Por que adotar** (página de convencimento) e **Diagnóstico gratuito** para municípios, com relatório em PDF/impressão (`assets/js/diagnostico.js`).
 - **Newsletter** com dupla confirmação, **formulário de apoio à implantação** (e-mail para a equipe + resposta automática), **Privacidade, Cookies e Termos** (LGPD).
 - **Analytics próprio sem cookies** e **painel administrativo** em `/admin`.
@@ -15,7 +15,7 @@ Portal de conhecimento sobre moedas sociais, economia circular e desenvolvimento
 
 ## Stack
 
-PHP 8.1+ sem framework, SQLite (ou MySQL), SDK oficial da Anthropic, Parsedown. Dependências já incluídas em `vendor/`.
+PHP 8.1+ sem framework, SQLite (ou MySQL), API da OpenAI (cURL), Parsedown. Dependências já incluídas em `vendor/`.
 
 ## Rodar localmente
 

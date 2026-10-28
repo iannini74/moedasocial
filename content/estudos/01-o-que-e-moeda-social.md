@@ -9,19 +9,19 @@ published: 2026-10-28
 keywords: moeda social, moeda local, moeda complementar, banco comunitário, o que é moeda social
 ---
 
-**Moeda social é um meio de pagamento complementar ao real, aceito apenas dentro de um território ou rede — um bairro, uma cidade, um grupo de comércios —, criado para que a renda circule ali mesmo em vez de "vazar" para fora.** Ela não substitui a moeda oficial: na maioria dos modelos brasileiros vale exatamente 1 real, é lastreada em reais e pode ser convertida de volta pelo comerciante.
+**Moeda social é um meio de pagamento complementar ao real, aceito apenas dentro de um território ou rede — um bairro, uma cidade, um grupo de comércios —, criado para que a renda seja gasta ali mesmo, e não em outras cidades.** Ela não substitui a moeda oficial: na maioria dos modelos brasileiros vale exatamente 1 real, é lastreada em reais e pode ser convertida de volta pelo comerciante.
 
 A ideia é antiga, mas ganhou outra escala com a tecnologia. Hoje o Brasil tem cerca de **152 bancos comunitários e 182 moedas sociais, 160 delas em circulação**, segundo levantamento divulgado pelo Ministério do Trabalho e Emprego[^1]. Para a Rede Brasileira de Bancos Comunitários, algo próximo de **R$ 1 bilhão** circulou em moedas sociais em 2024[^2] — número declarado pela própria rede, ainda sem auditoria independente.
 
 ## Por que uma cidade precisaria de outra moeda?
 
-Porque o real é ótimo para circular por todo o país — e é justamente isso que, às vezes, prejudica a economia local. Quando o salário, a aposentadoria ou um benefício social é gasto em uma grande rede de outra cidade ou numa compra on-line, aquele dinheiro sai do município e raramente volta.
+Porque o real pode ser gasto em qualquer lugar do país. Quando o salário, a aposentadoria ou um benefício social é gasto em uma grande rede de outra cidade ou em uma compra on-line, o comércio local deixa de vender, deixa de contratar e o município deixa de arrecadar.
 
 O caso que inaugurou o tema no Brasil mostra o tamanho do problema. Antes da criação do banco comunitário, uma pesquisa feita pelos moradores do Conjunto Palmeiras, em Fortaleza, descobriu que **93% das compras da comunidade eram feitas fora do bairro**[^3]. Daí nasceu, em 1998, o Banco Palmas e sua moeda, a Palmas.
 
-A New Economics Foundation, do Reino Unido, chamou esse fenômeno de "balde furado": cada gasto feito fora é um furo por onde a renda local escorre[^4]. A moeda social funciona como um remendo nesses furos — ela só é aceita por quem está dentro do território, então o dinheiro precisa ser gasto ali.
+A New Economics Foundation, do Reino Unido, mede esse problema como "vazamento" de renda: a parcela do dinheiro que entra em uma comunidade e é gasta fora dela[^4]. A moeda social reduz esse vazamento porque só é aceita por comércios do território. Quem recebe precisa gastar ali.
 
-> **Resumo:** a moeda social não cria riqueza do nada. Ela faz o mesmo dinheiro dar **mais voltas** dentro da cidade antes de sair, multiplicando vendas, empregos e renda locais.
+> **Resumo:** a moeda social não cria dinheiro novo. Ela garante que o mesmo dinheiro seja gasto **mais vezes dentro do município** antes de sair, o que aumenta vendas, empregos e renda locais.
 
 ## Como funciona, passo a passo
 
@@ -73,7 +73,7 @@ O Drex é uma infraestrutura do próprio Banco Central para representar o real e
 
 ### O comerciante perde dinheiro ao aceitar moeda social?
 
-Não, se o modelo for bem desenhado: ele vende mais, recebe pelo celular e pode resgatar em reais. Em alguns modelos há uma pequena taxa sobre as vendas — em Maricá, 2% que ficam em um fundo local, segundo estudo da UFF[^8] — e há plataformas que dispensam o aluguel de maquininha.
+Não, se o modelo for bem desenhado: ele vende mais, recebe pelo celular e pode resgatar em reais. Em alguns modelos há uma pequena taxa sobre as vendas — em Maricá, 2% que ficam em um fundo local, segundo estudo da UFF[^8] — e há plataformas que dispensam a máquina de cartão.
 
 ### Quem guarda o dinheiro do lastro?
 

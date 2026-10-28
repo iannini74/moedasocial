@@ -35,7 +35,7 @@ Use o [diagnóstico gratuito](/diagnostico) do portal para uma primeira estimati
 
 ## Etapa 3 — Base legal (semanas 6 a 12)
 
-A **lei municipal** é a âncora da segurança jurídica. Ela deve prever:
+A **lei municipal** é a base da segurança jurídica. Ela deve prever:
 
 1. criação do programa, objetivos e público;
 2. a moeda social como **instrumento de pagamento de aceitação voluntária, sem curso forçado**, paridade 1:1 e lastro integral;
@@ -64,11 +64,11 @@ Este é o ponto que mais gerou problemas no Brasil. A prática recomendada:
 
 Critérios técnicos que fazem diferença:
 
-- **100% digital, com aplicativo e pagamento por QR Code** — sem cartão físico para emitir e sem maquininha para o comércio;
+- **100% digital, com aplicativo e pagamento por QR Code** — sem cartão físico para emitir e sem máquina de cartão para o comércio;
 - **arranjo fechado**, aceito só pelos credenciados do município;
 - **fornecedor que não custodia recursos** nem atua como instituição financeira;
 - **rastreabilidade de ponta a ponta**, trilha de auditoria e relatórios prontos para o Tribunal de Contas e a LRF;
-- **painel de gestão em tempo real**: beneficiários, saldos, comércios ativos, volume por bairro e setor, "vazamento evitado";
+- **painel de gestão em tempo real**: beneficiários, saldos, comércios ativos, volume gasto por bairro e setor;
 - **regras parametrizáveis**: públicos, limites, categorias e validade do saldo;
 - **integração com sistemas de PDV** e capacidade de evoluir para o split payment da Reforma Tributária;
 - **segurança da informação e LGPD**;
@@ -110,7 +110,7 @@ Critérios técnicos que fazem diferença:
 
 ### Quanto custa implantar?
 
-O custo principal é o próprio benefício, que já seria pago de outra forma. Há modelos de tecnologia **sem custo fixo para a prefeitura**, remunerados por taxa transparente sobre vendas prevista em lei; outros cobram mensalidade ou valor por conta. Compare o custo total, incluindo cartões, maquininhas e operação.
+O custo principal é o próprio benefício, que já seria pago de outra forma. Há modelos de tecnologia **sem custo fixo para a prefeitura**, remunerados por taxa transparente sobre vendas prevista em lei; outros cobram mensalidade ou valor por conta. Compare o custo total, incluindo cartões, máquinas de cartão e operação.
 
 ### Precisa de banco comunitário?
 
@@ -118,7 +118,7 @@ Não necessariamente. Ele é valioso para crédito solidário e mobilização, m
 
 ### E se o comerciante não quiser aderir?
 
-A adesão é voluntária. O que atrai o comércio é volume previsível de vendas, recebimento simples pelo celular, ausência de maquininha e resgate rápido em reais.
+A adesão é voluntária. O que atrai o comércio é volume previsível de vendas, recebimento simples pelo celular, dispensa de máquina de cartão e resgate rápido em reais.
 
 ### Quem pode me ajudar?
 

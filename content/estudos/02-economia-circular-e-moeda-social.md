@@ -30,7 +30,7 @@ Para a lei, contam os empreendimentos "autogestionários cujos membros exerçam 
 
 ## Onde a moeda social entra
 
-Uma economia é "circular" também no sentido financeiro quando **o dinheiro dá várias voltas no território antes de sair**. Estudos da Civic Economics nos Estados Unidos mostram a diferença: negócios independentes recirculam localmente **47,7%** da sua receita, contra **13,6%** das grandes redes[^7]. A moeda social cria um circuito em que essa recirculação é favorecida por desenho.
+A lógica da economia circular também vale para o dinheiro: quanto **mais vezes a mesma renda é gasta dentro do território antes de sair**, maior o resultado para a economia local. Estudos da Civic Economics nos Estados Unidos mostram a diferença: negócios independentes recirculam localmente **47,7%** da sua receita, contra **13,6%** das grandes redes[^7]. A moeda social cria um circuito em que essa recirculação é favorecida por desenho.
 
 Na prática, ela se conecta à economia circular de três formas:
 
@@ -55,7 +55,7 @@ Na prática, ela se conecta à economia circular de três formas:
 
 - **Há base de política federal.** A ENEC prevê instrumentos financeiros para a economia circular e a valorização dos catadores[^2]; a Lei Paul Singer reconhece os empreendimentos solidários[^5].
 - **Os municípios têm a obrigação** de gerir resíduos sólidos e metas de reciclagem, e podem usar a moeda social como incentivo direto à separação na fonte.
-- **O dinheiro do incentivo não vaza.** Diferentemente de um desconto em conta ou de um pagamento em dinheiro, o incentivo em moeda social volta para o comércio local.
+- **O incentivo é gasto no comércio local.** Diferentemente de um desconto em conta ou de um pagamento em dinheiro, o incentivo em moeda social só pode ser usado nos comércios credenciados do município.
 - **Empresas buscam projetos de impacto mensurável.** Programas de logística reversa e ESG podem financiar incentivos pagos em moeda social, com rastreabilidade de cada real.
 
 ## Como desenhar um programa de "moeda verde"
