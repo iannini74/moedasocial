@@ -15,7 +15,7 @@
   <div class="adm-wrap">
     <a class="logo" href="/admin"><?php partial('logo') ?><span class="logo-text"><strong>moeda<span>social</span></strong><small>painel administrativo</small></span></a>
     <nav class="adm-nav">
-      <?php $cur = $__view; foreach (['admin/dashboard' => ['/admin', 'Analytics'], 'admin/contacts' => ['/admin/contatos', 'Contatos'], 'admin/subscribers' => ['/admin/inscritos', 'Inscritos'], 'admin/diagnostics' => ['/admin/diagnosticos', 'Diagnósticos'], 'admin/blog' => ['/admin/blog', 'Blog'], 'admin/news' => ['/admin/noticias', 'Notícias'], 'admin/editais' => ['/admin/editais', 'Editais']] as $v => [$h, $l]): ?>
+      <?php $cur = $__view; foreach (['admin/dashboard' => ['/admin', 'Analytics'], 'admin/contacts' => ['/admin/contatos', 'Contatos'], 'admin/subscribers' => ['/admin/inscritos', 'Inscritos'], 'admin/diagnostics' => ['/admin/diagnosticos', 'Diagnósticos'], 'admin/blog' => ['/admin/blog', 'Blog'], 'admin/news' => ['/admin/noticias', 'Notícias'], 'admin/editais' => ['/admin/editais', 'Editais'], 'admin/acessos' => ['/admin/acessos', 'Acessos' . (($n = Membros::pendingCount()) ? " ($n)" : '')]] as $v => [$h, $l]): ?>
         <a href="<?= $h ?>"<?= $cur === $v ? ' aria-current="page"' : '' ?>><?= $l ?></a>
       <?php endforeach; ?>
       <a href="/" target="_blank">Ver site ↗</a>

@@ -3,7 +3,7 @@ $ts = (int) $x['published_at'];
 $deadline = (int) $x['deadline_at'];
 $open = $deadline && $deadline >= strtotime('today');
 $place = trim($x['municipio'] . ($x['uf'] ? '/' . $x['uf'] : ''), '/');
-$catIcon = ['moeda-social' => 'coins', 'distribuicao-beneficios' => 'wallet', 'beneficios-sociais' => 'users'][$x['categoria']] ?? 'file'; ?>
+$catIcon = ['moeda-social' => 'coins', 'vale-alimentacao' => 'cart', 'distribuicao-beneficios' => 'wallet', 'beneficios-sociais' => 'users'][$x['categoria']] ?? 'file'; ?>
 <li class="news-item edital">
   <div class="news-date"><b><?= date('d', $ts) ?></b><?= ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'][(int) date('n', $ts) - 1] ?></div>
   <div>

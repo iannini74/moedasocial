@@ -1,14 +1,14 @@
 <?php
 declare(strict_types=1);
 
-/** Área administrativa: analytics completo, contatos, inscritos, diagnósticos, blog, notícias e editais. */
+/** Área administrativa: analytics completo, contatos, inscritos, diagnósticos, blog, notícias, editais e acessos. */
 final class Admin
 {
     private static function start(): void
     {
         if (session_status() !== PHP_SESSION_ACTIVE) {
             session_name('ms_admin');
-            session_set_cookie_params(['lifetime' => 0, 'path' => '/admin', 'secure' => !empty($_SERVER['HTTPS']), 'httponly' => true, 'samesite' => 'Strict']);
+            session_set_cookie_params(['lifetime' => 0, 'path' => '/', 'secure' => !empty($_SERVER['HTTPS']), 'httponly' => true, 'samesite' => 'Strict']);
             session_start();
         }
         header('X-Robots-Tag: noindex, nofollow');
@@ -169,6 +169,14 @@ final class Admin
                     'hasKey' => Ai::enabled(), 'flash' => $_SESSION['flash'] ?? null, 'csrf' => $csrf,
                 ], 'admin/layout');
             })(),
+            'acessos' => (function () use ($csrf) {
+                $st = isset(Membros::STATUS[$_GET['status'] ?? '']) ? $_GET['status'] : 'pendente';
+                view('admin/acessos', [
+                    'rows' => Db::all('SELECT * FROM members WHERE status = ? ORDER BY created_at DESC LIMIT 1000', [$st]),
+                    'counts' => array_column(Db::all('SELECT status, COUNT(*) n FROM members GROUP BY status'), 'n', 'status'),
+                    'status' => $st, 'flash' => $_SESSION['flash'] ?? null, 'csrf' => $csrf,
+                ], 'admin/layout');
+            })(),
             default => not_found(),
         };
         unset($_SESSION['flash']);
@@ -218,6 +226,13 @@ final class Admin
             case 'editais:fixar':
                 Db::run('UPDATE editais SET pinned = 1 - pinned WHERE id = ?', [$id]);
                 break;
+            case 'acessos:decidir':
+                Membros::decide($id, (string) ($_POST['to'] ?? ''));
+                $_SESSION['flash'] = ($_POST['to'] ?? '') === 'aprovado' ? 'Acesso aprovado. O usuário foi avisado por e-mail.' : 'Status atualizado.';
+                break;
+            case 'acessos:excluir':
+                Membros::delete($id);   // pedido de eliminação (LGPD art. 18)
+                break;
             case 'contatos:status':
                 Db::run('UPDATE contacts SET status = ? WHERE id = ?', [in_array($_POST['status'], ['novo', 'em-atendimento', 'proposta', 'fechado', 'descartado'], true) ? $_POST['status'] : 'novo', $id]);
                 break;
@@ -234,6 +249,7 @@ final class Admin
         $map = [
             'contatos.csv' => 'SELECT * FROM contacts ORDER BY created_at DESC',
             'inscritos.csv' => 'SELECT email, name, profile, municipality, uf, status, source, created_at, confirmed_at FROM subscribers ORDER BY created_at DESC',
+            'acessos.csv' => 'SELECT email, name, phone, org_type, organization, role, municipality, uf, purpose, status, created_at, last_login_at, login_count FROM members ORDER BY created_at DESC',
             'diagnosticos.csv' => 'SELECT id, created_at, municipality, uf, population, score, data FROM diagnostics ORDER BY created_at DESC',
             'acessos.csv' => 'SELECT day, path, section, ref_type, ref_domain, utm_source, utm_medium, utm_campaign, country, region, city, device, browser, os, duration_ms, scroll_pct FROM pageviews ORDER BY id DESC LIMIT 100000',
         ];
@@ -244,7 +260,7 @@ final class Admin
         fwrite($out, "\xEF\xBB\xBF");
         $first = true;
         foreach (Db::run($sql)->fetchAll() as $row) {
-            foreach (['created_at', 'confirmed_at'] as $c) {
+            foreach (['created_at', 'confirmed_at', 'last_login_at'] as $c) {
                 if (isset($row[$c]) && is_numeric($row[$c])) {
                     $row[$c] = date('Y-m-d H:i', (int) $row[$c]);
                 }

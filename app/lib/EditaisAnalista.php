@@ -17,6 +17,7 @@ final class EditaisAnalista
 
     private const KEYWORDS = [
         'moeda-social' => ['moeda social', 'moedas sociais', 'moeda local', 'banco comunitário', 'mumbuca', 'arariboia'],
+        'vale-alimentacao' => ['vale-alimentação', 'vale alimentação', 'vale-refeição', 'vale refeição', 'auxílio-alimentação', 'auxílio alimentação'],
         'distribuicao-beneficios' => ['cartão benefício', 'cartão-benefício', 'voucher', 'cesta básica', 'carteira digital'],
         'beneficios-sociais' => ['renda básica', 'transferência de renda', 'benefício eventual', 'auxílio emergencial', 'programa social'],
     ];
@@ -24,8 +25,8 @@ final class EditaisAnalista
     public static function run(int $max): array
     {
         // Itens do PNCP e da imprensa sem nenhum termo do tema são descartados sem gastar IA
-        foreach (Db::all("SELECT id, title, trecho FROM editais WHERE status = 'novo' AND source IN ('PNCP', 'Imprensa')") as $row) {
-            if (!Editais::onTheme($row['title'] . ' ' . $row['trecho'])) {
+        foreach (Db::all("SELECT id, title, summary, trecho FROM editais WHERE status = 'novo' AND source IN ('PNCP', 'Imprensa')") as $row) {
+            if (!Editais::onTheme($row['title'] . ' ' . $row['summary'] . ' ' . $row['trecho'])) {
                 Db::run("UPDATE editais SET status = 'descartado', analyzed_at = ? WHERE id = ?", [time(), $row['id']]);
             }
         }
@@ -136,12 +137,13 @@ Você é o analista de editais do Portal Moeda Social. Sua tarefa é decidir qua
 
 Categorias aceitas:
 - moeda-social: lei, decreto ou projeto de lei que cria ou regulamenta moeda social ou moeda local; lançamento oficial de moeda social ou de banco comunitário por prefeitura; edital, licitação, chamamento ou contratação de plataforma, operador ou banco comunitário; credenciamento de comércios para aceitar a moeda; calendário de pagamento ou parcela extra de moeda social.
+- vale-alimentacao: licitação, pregão, edital, credenciamento, contratação direta, contrato, aditivo, lei ou decreto sobre vale-alimentação, vale-refeição ou auxílio-alimentação, inclusive para servidores públicos e empregados, e sobre a empresa que fornece ou administra esses cartões.
 - distribuicao-beneficios: licitação, edital, pregão, credenciamento ou contrato para meios de pagamento de benefícios sociais à população (cartão benefício, voucher, carteira digital, cesta básica por cartão).
 - beneficios-sociais: lei, decreto, edital, abertura de inscrições ou calendário de pagamento de programa de transferência de renda, renda básica, auxílio ou benefício eventual para a população.
 
 Notícias da imprensa ou de sites oficiais entram quando relatam uma medida oficial concreta de um órgão público (criação, lançamento, projeto de lei, edital, credenciamento, inscrições, data de pagamento). Nesse caso use tipo "anuncio", a menos que o item seja o próprio ato (lei, decreto, edital etc.).
 
-Marque relevante = false (categoria "nenhuma") para: vale-alimentação ou vale-refeição de servidores públicos, compra de alimentos ou merenda, compras de materiais em geral, feiras, eventos, oficinas e cursos, artigos de opinião, análises, histórias e balanços de resultados sem nova medida, temas de outros países, e qualquer item fora das três categorias.
+Marque relevante = false (categoria "nenhuma") para: compra de gêneros alimentícios, refeições prontas ou merenda escolar, compras de materiais em geral, feiras, eventos, oficinas e cursos, artigos de opinião, análises, histórias e balanços de resultados sem nova medida, temas de outros países, e qualquer item fora das três categorias.
 
 Regras de escrita:
 - titulo: até 110 caracteres, diz quem fez o quê e onde, começando por "Município (UF)" ou pelo órgão. Exemplo: "Maricá (RJ) abre credenciamento de comércios para a moeda Mumbuca". Datas no texto sempre no formato brasileiro (14/12/2026).

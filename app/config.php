@@ -101,6 +101,9 @@ return [
 
     'editais' => [
         // Pesquisa diária de editais, chamamentos, licitações, leis e decretos (cron "editais")
+        // Área restrita: acesso mediante cadastro aprovado e código enviado por e-mail a cada login
+        'master_email'    => 'tulio@tribex.com.br',   // sempre aprovado; recebe os avisos de novas solicitações
+        'session_hours'   => 12,
         'refresh_hours'   => 24,
         'lookback_days'   => 10,     // janela de busca nas execuções diárias
         'first_run_days'  => 90,     // janela da primeira execução
@@ -114,12 +117,14 @@ return [
             'moeda social', 'moeda digital social', 'banco comunitário', 'cartão benefício social',
             'benefício eventual cartão', 'cesta básica cartão', 'auxílio alimentação programa social',
             'transferência de renda', 'renda básica',
+            'vale alimentação', 'vale-refeição', 'auxílio alimentação servidores', 'cartão alimentação servidores',
         ],
         // Diários oficiais municipais (Querido Diário): leis, decretos, chamamentos e credenciamentos
         'diario_terms' => [
             '"moeda social"', '"moeda digital" programa municipal', '"banco comunitário"',
             '"renda básica" lei municipal', '"transferência de renda" programa municipal',
             '"cartão benefício" programa social', 'credenciamento estabelecimentos "moeda"',
+            '"vale-alimentação" pregão OR licitação', '"vale-refeição" pregão OR licitação',
         ],
         // Google Notícias: anúncios de editais e programas na imprensa e em sites oficiais
         'news_queries' => [
@@ -132,6 +137,9 @@ return [
             '"inscrições abertas" "transferência de renda" prefeitura',
             '"benefício eventual" OR "cartão benefício" prefeitura edital',
             'site:gov.br chamamento público "economia solidária" OR "banco comunitário"',
+            'licitação OR pregão "vale-alimentação" OR "vale alimentação" prefeitura OR câmara',
+            'pregão "vale-refeição" OR "cartão alimentação" servidores',
+            'lei OR decreto "auxílio-alimentação" servidores municipais',
         ],
     ],
 

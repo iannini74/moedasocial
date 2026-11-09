@@ -51,13 +51,14 @@ final class EditaisPesquisador
         $today = date_long_br(time());
         $from = date_long_br(time() - $days * 86400);
         $prompt = <<<TXT
-Hoje é {$today}. Pesquise na web publicações oficiais de órgãos públicos brasileiros (prefeituras, câmaras municipais, governos estaduais, ministérios) feitas entre {$from} e hoje, sobre estes três temas:
+Hoje é {$today}. Pesquise na web publicações oficiais de órgãos públicos brasileiros (prefeituras, câmaras municipais, governos estaduais, ministérios) feitas entre {$from} e hoje, sobre estes quatro temas:
 
 1. Moeda social: lei, decreto ou projeto de lei que cria ou regulamenta moeda social ou moeda local digital; lançamento oficial de moeda social ou banco comunitário; edital, licitação ou chamamento para contratar plataforma, operador ou banco comunitário; credenciamento de comércios para aceitar a moeda.
 2. Distribuição de benefícios: licitação, edital, pregão ou credenciamento para meios de pagamento de benefícios sociais à população (cartão benefício, voucher, carteira digital, cesta básica por cartão, auxílio-alimentação de programa social).
 3. Benefícios sociais: lei, decreto, edital ou abertura de inscrições de programas municipais ou estaduais de transferência de renda, renda básica, auxílios e benefícios eventuais.
+4. Vale-alimentação: licitação, pregão, credenciamento, contratação ou lei sobre vale-alimentação, vale-refeição ou auxílio-alimentação, inclusive para servidores públicos.
 
-Não inclua: vale-alimentação ou vale-refeição de servidores públicos, compra de alimentos para merenda escolar, feiras e eventos, artigos de opinião e notícias sem uma medida oficial concreta.
+Não inclua: compra de gêneros alimentícios ou merenda escolar, feiras e eventos, artigos de opinião e notícias sem uma medida oficial concreta.
 
 Prefira fontes primárias: diário oficial, site da prefeitura ou do governo, PNCP, portal de transparência. Use notícia da imprensa só quando a fonte oficial não estiver disponível.
 

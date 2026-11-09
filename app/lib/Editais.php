@@ -14,6 +14,7 @@ final class Editais
 {
     public const CATEGORIES = [
         'moeda-social'            => 'Moeda social',
+        'vale-alimentacao'        => 'Vale-alimentação',
         'distribuicao-beneficios' => 'Distribuição de benefícios',
         'beneficios-sociais'      => 'Benefícios sociais',
     ];
@@ -50,6 +51,8 @@ final class Editais
         'cartão-benefício', 'cartão alimentação', 'cartão-alimentação', 'cartão social', 'cesta básica', 'cestas básicas',
         'auxílio alimentação', 'auxílio-alimentação', 'auxílio emergencial', 'auxílio financeiro', 'auxílio municipal',
         'bolsa família', 'cadúnico', 'cadastro único', 'voucher', 'programa social', 'programa municipal de renda',
+        'vale-alimentação', 'vale alimentação', 'vale-refeição', 'vale refeição', 'cartão refeição', 'cartão-refeição',
+        'auxílio-refeição', 'auxílio refeição', 'alimentação e refeição', 'benefício alimentação', 'pat - programa de alimentação',
     ];
 
     public static function onTheme(string $text): bool
@@ -65,18 +68,19 @@ final class Editais
 
     /**
      * Versão das regras de análise. Ao mudar as regras, aumente o número: os itens
-     * dos últimos 60 dias voltam uma vez para a fila e são analisados de novo
-     * (exceto os fixados e as compras do PNCP já descartadas).
+     * dos últimos 60 dias (exceto os fixados) voltam uma vez para a fila e são
+     * analisados de novo.
      */
-    private const RULES_VERSION = 4;
+    private const RULES_VERSION = 5;
 
     private static function reprocessIfRulesChanged(): void
     {
         if ((int) Db::setting('editais_rules') >= self::RULES_VERSION) {
             return;
         }
+        // Os descartados que não tiverem termos do tema voltam a ser descartados sem custo de IA
         Db::run("UPDATE editais SET status = 'novo' WHERE pinned = 0 AND created_at > ?
-            AND (status IN ('publicado', 'revisar', 'duplicado') OR (status = 'descartado' AND source <> 'PNCP'))", [time() - 60 * 86400]);
+            AND status IN ('publicado', 'revisar', 'duplicado', 'descartado')", [time() - 60 * 86400]);
         Db::setting('editais_rules', (string) self::RULES_VERSION);
     }
 

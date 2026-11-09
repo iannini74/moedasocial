@@ -16,6 +16,7 @@
 <tr><th>Situação</th><th>Dados</th><th>Finalidade</th><th>Base legal (LGPD)</th></tr>
 <tr><td>Newsletter</td><td>E-mail, nome (opcional), perfil, município/UF (opcionais), data e registro do aceite</td><td>Enviar aviso de novos artigos e conteúdos do portal; confirmar a inscrição (dupla confirmação)</td><td>Consentimento (art. 7º, I)</td></tr>
 <tr><td>Formulário de contato / apoio à implantação</td><td>Nome, e-mail, telefone, cargo, organização, município/UF, população, estágio, interesses e mensagem</td><td>Responder à solicitação, entender as necessidades do município e apresentar soluções de apoio à implantação de moeda social, inclusive soluções da TribeX, como a Moeda Nobre</td><td>Procedimentos preliminares a contrato a pedido do titular (art. 7º, V) e legítimo interesse (art. 7º, IX)</td></tr>
+<tr><td>Área de editais (cadastro e login)</td><td>Nome, e-mail, telefone (opcional), tipo de organização, organização, cargo, município/UF, motivo do pedido, data do aceite, datas de acesso e códigos de acesso (guardados apenas como código cifrado, válidos por 10 minutos)</td><td>Analisar e aprovar o pedido de acesso, enviar o código a cada entrada, manter a sessão segura e, quando houver interesse, apresentar soluções de apoio, inclusive da TribeX</td><td>Consentimento (art. 7º, I) e legítimo interesse (art. 7º, IX)</td></tr>
 <tr><td>Diagnóstico gratuito</td><td>Dados públicos do município informados (população, receitas, parâmetros do programa). <strong>Não pedimos dados pessoais.</strong></td><td>Gerar o relatório e produzir estatísticas agregadas sobre interesse dos municípios</td><td>Legítimo interesse (art. 7º, IX)</td></tr>
 <tr><td>Navegação (medição própria)</td><td>Página visitada, origem do acesso, tipo de dispositivo, navegador, idioma, cidade/estado/país aproximados, tempo de leitura. O IP é usado apenas no momento do acesso para gerar um código pseudonimizado com sal diário e <strong>nunca é armazenado</strong></td><td>Entender quais conteúdos são úteis, melhorar o portal e medir a efetividade dos anúncios</td><td>Legítimo interesse (art. 7º, IX), com dados pseudonimizados</td></tr>
 <tr><td>Estatísticas com consentimento</td><td>Identificador aleatório guardado no seu navegador (localStorage) e, se ativado, cookies do Google Analytics 4</td><td>Medir visitas recorrentes</td><td>Consentimento (art. 7º, I)</td></tr>
@@ -29,7 +30,7 @@
 <li><strong>ipwho.is</strong> — consulta de localização aproximada (cidade/estado/país) a partir do IP, sem armazenamento do IP por nós;</li>
 <li><strong>Google Fonts</strong> e <strong>Cloudflare cdnjs</strong> — fornecimento de fontes e bibliotecas técnicas, que recebem seu IP ao carregar a página;</li>
 <li><strong>Google Analytics 4</strong> — somente se você consentir com estatísticas e se a ferramenta estiver ativada;</li>
-<li><strong>OpenAI</strong> — o agente editorial usa inteligência artificial para pesquisar e redigir artigos; <strong>nenhum dado pessoal de visitantes é enviado</strong>.</li>
+<li><strong>OpenAI</strong> — os agentes do blog e dos editais usam inteligência artificial para pesquisar, analisar e redigir conteúdo a partir de fontes públicas; <strong>nenhum dado pessoal de visitantes ou cadastrados é enviado</strong>.</li>
 </ul>
 <p>Alguns desses fornecedores podem tratar dados fora do Brasil. Nesses casos, a transferência internacional ocorre conforme o art. 33 da LGPD e a regulamentação da ANPD, com cláusulas contratuais e medidas de segurança. Também poderemos compartilhar dados para cumprir obrigação legal ou ordem de autoridade competente.</p>
 
@@ -37,6 +38,7 @@
 <ul>
 <li><strong>Newsletter:</strong> enquanto a inscrição estiver ativa; inscrições não confirmadas são apagadas em 30 dias;</li>
 <li><strong>Contatos:</strong> pelo tempo do atendimento e até 5 anos para exercício regular de direitos;</li>
+<li><strong>Cadastro da área de editais:</strong> enquanto o acesso estiver ativo ou até você pedir a exclusão; códigos de acesso vencem em 10 minutos;</li>
 <li><strong>Estatísticas de navegação:</strong> até 24 meses, de forma pseudonimizada; cache de localização aproximada por 30 dias;</li>
 <li><strong>Registros de segurança:</strong> até 6 meses (Marco Civil da Internet).</li>
 </ul>

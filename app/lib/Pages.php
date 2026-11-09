@@ -124,8 +124,23 @@ final class Pages
         ]);
     }
 
+    private static function editaisMeta(): array
+    {
+        return [
+            'title' => 'Editais de moeda social, vale-alimentação e benefícios sociais',
+            'description' => 'Editais, chamamentos, licitações, leis e decretos sobre moeda social, vale-alimentação, distribuição de benefícios e programas sociais. Pesquisa diária, com acesso mediante cadastro.',
+            'path' => '/editais',
+            'schema' => [Seo::breadcrumbs(['Início' => '/', 'Editais' => '/editais'])],
+        ];
+    }
+
     public static function editais(): void
     {
+        header('Cache-Control: private, no-store');
+        if (!Membros::canView()) {
+            self::editaisGate();
+            return;
+        }
         $f = [
             'categoria' => isset(Editais::CATEGORIES[$_GET['categoria'] ?? '']) ? $_GET['categoria'] : null,
             'uf' => in_array($_GET['uf'] ?? '', ufs(), true) ? $_GET['uf'] : null,
@@ -135,17 +150,7 @@ final class Pages
         $per = 20;
         $filtered = $f['categoria'] || $f['uf'] || $f['abertos'];
         view('pages/editais', [
-            'meta' => [
-                'title' => $f['categoria'] ? 'Editais: ' . Editais::CATEGORIES[$f['categoria']] : 'Editais de moeda social e benefícios sociais',
-                'description' => 'Editais, chamamentos, licitações, leis e decretos sobre moeda social, distribuição de benefícios e programas sociais de municípios e estados. Pesquisa atualizada todos os dias.',
-                'path' => '/editais' . ($f['categoria'] ? '?categoria=' . $f['categoria'] : ''),
-                'robots' => $page > 1 || $f['uf'] || $f['abertos'] ? 'noindex,follow' : null,
-                'schema' => [
-                    Seo::breadcrumbs(['Início' => '/', 'Editais' => '/editais']),
-                    ['@context' => 'https://schema.org', '@type' => 'CollectionPage', 'name' => 'Editais de moeda social e benefícios sociais',
-                        'url' => url('/editais', true), 'inLanguage' => 'pt-BR', 'dateModified' => date('c', (int) Db::setting('editais_last_run') ?: time())],
-                ],
-            ],
+            'meta' => ['robots' => 'noindex,follow'] + self::editaisMeta(),
             'items' => Editais::latest($per, $f, ($page - 1) * $per),
             'total' => Editais::count($f),
             'all' => $filtered ? Editais::count() : null,
@@ -153,7 +158,54 @@ final class Pages
             'f' => $f,
             'page' => $page,
             'per' => $per,
+            'admin' => Membros::isAdmin(),
+            'member' => Membros::current(),
         ]);
+    }
+
+    /** Página de acesso: pedido de cadastro e login por código. */
+    private static function editaisGate(array $state = []): void
+    {
+        view('pages/editais-acesso', $state + [
+            'meta' => self::editaisMeta(),
+            'stats' => [
+                'total' => Editais::count(),
+                'abertos' => Editais::count(['abertos' => true]),
+                'categorias' => array_map(fn($k) => Editais::count(['categoria' => $k]), array_combine(array_keys(Editais::CATEGORIES), array_keys(Editais::CATEGORIES))),
+            ],
+            'mode' => 'inicio', 'errors' => [], 'data' => [], 'msg' => null, 'email' => '',
+        ]);
+    }
+
+    public static function editaisRequest(): void
+    {
+        $r = Membros::request();
+        self::editaisGate($r['ok']
+            ? ['mode' => 'enviado', 'msg' => $r['msg']]
+            : ['mode' => 'cadastro', 'errors' => $r['errors'], 'data' => $r['data']]);
+    }
+
+    public static function editaisLogin(): void
+    {
+        $email = input('email', 190);
+        $r = Membros::sendCode($email);
+        self::editaisGate($r['ok'] ? ['mode' => 'codigo', 'email' => $email, 'msg' => $r['msg']] : ['mode' => 'inicio', 'email' => $email, 'loginError' => $r['msg']]);
+    }
+
+    public static function editaisCode(): void
+    {
+        $email = input('email', 190);
+        $r = Membros::verify($email, input('code', 20));
+        if ($r['ok']) {
+            redirect('/editais');
+        }
+        self::editaisGate(['mode' => 'codigo', 'email' => $email, 'codeError' => $r['msg']]);
+    }
+
+    public static function editaisLogout(): void
+    {
+        Membros::logout();
+        redirect('/editais');
     }
 
     public static function blog(): void

@@ -7,7 +7,7 @@ declare(strict_types=1);
 final class Db
 {
     private static ?PDO $pdo = null;
-    private const SCHEMA_VERSION = 4;
+    private const SCHEMA_VERSION = 5;
 
     public static function pdo(): PDO
     {
@@ -270,6 +270,34 @@ final class Db
                 created_at INTEGER,
                 analyzed_at INTEGER
             )",
+            "members (
+                id $pk,
+                email {$str(190)} NOT NULL UNIQUE,
+                name {$str(150)},
+                phone {$str(40)},
+                org_type {$str(60)},
+                organization {$str(190)},
+                role {$str(120)},
+                municipality {$str(150)},
+                uf {$str(2)},
+                purpose $text,
+                status {$str(20)} NOT NULL DEFAULT 'pendente',
+                session_nonce {$str(64)},
+                consent {$str(255)},
+                created_at INTEGER,
+                decided_at INTEGER,
+                last_login_at INTEGER,
+                login_count INTEGER DEFAULT 0
+            )",
+            "login_codes (
+                id $pk,
+                member_id INTEGER NOT NULL,
+                code_hash {$str(64)} NOT NULL,
+                created_at INTEGER NOT NULL,
+                expires_at INTEGER NOT NULL,
+                attempts INTEGER DEFAULT 0,
+                used_at INTEGER
+            )",
             "rate_limits (
                 id $pk,
                 k {$str(120)} NOT NULL,
@@ -292,6 +320,8 @@ final class Db
             'idx_rl_k'        => 'rate_limits (k, ts)',
             'idx_ed_status'   => 'editais (status, published_at)',
             'idx_ed_tkey'     => 'editais (tkey)',
+            'idx_mb_status'   => 'members (status)',
+            'idx_lc_member'   => 'login_codes (member_id, created_at)',
         ];
         foreach ($indexes as $name => $def) {
             try {

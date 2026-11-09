@@ -13,6 +13,7 @@
 <tr><th>Nome</th><th>Tipo</th><th>Categoria</th><th>Para quê</th><th>Duração</th></tr>
 <tr><td>ms_consent</td><td>localStorage</td><td>Essencial</td><td>Guardar suas escolhas de privacidade</td><td>Até você limpar o navegador</td></tr>
 <tr><td>ms_admin</td><td>Cookie</td><td>Essencial</td><td>Sessão segura da área administrativa (somente equipe do portal)</td><td>Sessão</td></tr>
+<tr><td>ms_area</td><td>Cookie</td><td>Essencial</td><td>Sessão da área de editais, criada só depois do login com código</td><td>Até fechar o navegador (máximo de 12 horas)</td></tr>
 <tr><td>ms_vid</td><td>localStorage</td><td>Estatísticas (opcional)</td><td>Código aleatório para contar visitas recorrentes</td><td>Até revogação</td></tr>
 <tr><td>_ga, _ga_*</td><td>Cookie de terceiro (Google)</td><td>Estatísticas (opcional)</td><td>Google Analytics 4, apenas se ativado e consentido</td><td>Até 2 anos</td></tr>
 </table></div>

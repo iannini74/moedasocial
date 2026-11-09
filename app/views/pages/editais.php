@@ -1,4 +1,4 @@
-<?php /** @var array $items @var int $total @var ?int $all @var array $states @var array $f @var int $page @var int $per */
+<?php /** @var array $items @var int $total @var ?int $all @var array $states @var array $f @var int $page @var int $per @var bool $admin @var ?array $member */
 $pages = max(1, (int) ceil($total / $per));
 $qs = fn(array $over) => ($q = http_build_query(array_filter(array_merge(['categoria' => $f['categoria'], 'uf' => $f['uf'], 'abertos' => $f['abertos'] ? 1 : null], $over)))) ? '?' . $q : '';
 $last = (int) Db::setting('editais_last_run'); ?>
@@ -6,15 +6,25 @@ $last = (int) Db::setting('editais_last_run'); ?>
   <div class="wrap">
     <?php partial('crumbs', ['items' => ['Editais' => null]]) ?>
     <p class="kicker">Pesquisado todos os dias</p>
-    <h1><?= $f['categoria'] ? 'Editais: ' . e(Editais::CATEGORIES[$f['categoria']]) : 'Editais de moeda social e benefícios sociais' ?></h1>
-    <p class="lead">Editais, chamamentos, licitações, credenciamentos, leis, decretos e anúncios oficiais de municípios, estados e do governo federal sobre moeda social, distribuição de benefícios e programas sociais.</p>
+    <h1><?= $f['categoria'] ? 'Editais: ' . e(Editais::CATEGORIES[$f['categoria']]) : 'Editais de moeda social, vale-alimentação e benefícios sociais' ?></h1>
+    <p class="lead">Editais, chamamentos, licitações, credenciamentos, leis, decretos e anúncios oficiais de municípios, estados e do governo federal sobre moeda social, vale-alimentação, distribuição de benefícios e programas sociais.</p>
     <div class="meta-line">
       <?php if ($last): ?><span><?= icon('clock', 'icon-sm') ?> Última pesquisa: <?= date_br($last, true) ?></span><?php endif; ?>
       <span><?= icon('file', 'icon-sm') ?> <?= Editais::count() ?> publicações reunidas</span>
-      <span><?= icon('refresh', 'icon-sm') ?> <a href="/editais.xml">Acompanhe por RSS</a></span>
     </div>
   </div>
 </section>
+<div class="ed-session">
+  <div class="wrap">
+    <?php if ($admin): ?>
+      <span><?= icon('shield', 'icon-sm') ?> Você está vendo a página completa como administrador.</span>
+      <a href="/admin/acessos">Gerenciar acessos</a> <a href="/admin/editais">Gerenciar editais</a>
+    <?php else: ?>
+      <span><?= icon('lock', 'icon-sm') ?> Área restrita · conectado como <strong><?= e($member['email']) ?></strong></span>
+      <a href="/editais/sair">Sair</a>
+    <?php endif; ?>
+  </div>
+</div>
 <section class="section">
   <div class="wrap two-col two-col-wide">
     <div>
