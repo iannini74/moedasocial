@@ -26,6 +26,7 @@ final class Editais
         'lei'            => 'Lei',
         'decreto'        => 'Decreto',
         'inscricoes'     => 'Inscrições abertas',
+        'anuncio'        => 'Anúncio oficial',
         'outro'          => 'Publicação oficial',
     ];
 
@@ -39,7 +40,8 @@ final class Editais
 
     /** Termos do tema: itens do PNCP e da imprensa sem nenhum deles nem chegam à análise. */
     private const THEME = [
-        'moeda social', 'moedas sociais', 'moeda local', 'moeda digital', 'banco comunitário', 'bancos comunitários',
+        'moeda social', 'moedas sociais', 'moeda local', 'moeda digital', 'moeda própria', 'moeda municipal',
+        'banco comunitário', 'bancos comunitários', 'banco social', 'banco municipal', 'banco popular',
         'economia solidária', 'mumbuca', 'arariboia', 'renda básica', 'renda mínima', 'transferência de renda',
         'benefício eventual', 'benefícios eventuais', 'benefício social', 'benefícios sociais', 'cartão benefício',
         'cartão-benefício', 'cartão alimentação', 'cartão-alimentação', 'cartão social', 'cesta básica', 'cestas básicas',
@@ -56,6 +58,21 @@ final class Editais
             }
         }
         return false;
+    }
+
+    /**
+     * Versão das regras de análise. Ao mudar as regras, aumente o número: os itens
+     * descartados nos últimos 60 dias (exceto PNCP) voltam uma vez para a fila.
+     */
+    private const RULES_VERSION = 2;
+
+    private static function reprocessIfRulesChanged(): void
+    {
+        if ((int) Db::setting('editais_rules') >= self::RULES_VERSION) {
+            return;
+        }
+        Db::run("UPDATE editais SET status = 'novo' WHERE status = 'descartado' AND source <> 'PNCP' AND created_at > ?", [time() - 60 * 86400]);
+        Db::setting('editais_rules', (string) self::RULES_VERSION);
     }
 
     public static function due(): bool
@@ -103,7 +120,7 @@ final class Editais
         }
         $webDue = self::researchEnabled() && time() - (int) Db::setting('editais_last_web') > cfg('editais.refresh_hours', 24) * 3600 - 1800;
         $analysisDue = time() - (int) Db::setting('editais_last_analysis') > 120
-            && Db::value("SELECT id FROM editais WHERE status = 'novo' LIMIT 1");
+            && ((int) Db::setting('editais_rules') < self::RULES_VERSION || Db::value("SELECT id FROM editais WHERE status = 'novo' LIMIT 1"));
         match (true) {
             self::due() => self::withLock(fn() => self::collect()),
             $webDue => self::withLock(fn() => self::research()),
@@ -146,6 +163,7 @@ final class Editais
     private static function analyze(int $max): array
     {
         Db::setting('editais_last_analysis', (string) time());
+        self::reprocessIfRulesChanged();
         $r = EditaisAnalista::run($max);
         // Descartados e duplicados ficam 90 dias para auditoria e depois são apagados
         Db::run("DELETE FROM editais WHERE status IN ('descartado','duplicado') AND created_at < ?", [time() - 90 * 86400]);

@@ -7,7 +7,7 @@ $last = (int) Db::setting('editais_last_run'); ?>
     <?php partial('crumbs', ['items' => ['Editais' => null]]) ?>
     <p class="kicker">Pesquisado todos os dias</p>
     <h1><?= $f['categoria'] ? 'Editais: ' . e(Editais::CATEGORIES[$f['categoria']]) : 'Editais de moeda social e benefícios sociais' ?></h1>
-    <p class="lead">Editais, chamamentos, licitações, credenciamentos, leis e decretos publicados por municípios, estados e pelo governo federal sobre moeda social, distribuição de benefícios e programas sociais.</p>
+    <p class="lead">Editais, chamamentos, licitações, credenciamentos, leis, decretos e anúncios oficiais de municípios, estados e do governo federal sobre moeda social, distribuição de benefícios e programas sociais.</p>
     <div class="meta-line">
       <?php if ($last): ?><span><?= icon('clock', 'icon-sm') ?> Última pesquisa: <?= date_br($last, true) ?></span><?php endif; ?>
       <span><?= icon('file', 'icon-sm') ?> <?= Editais::count() ?> publicações reunidas</span>
