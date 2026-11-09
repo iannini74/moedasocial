@@ -23,6 +23,12 @@ final class EditaisAnalista
 
     public static function run(int $max): array
     {
+        // Itens do PNCP e da imprensa sem nenhum termo do tema são descartados sem gastar IA
+        foreach (Db::all("SELECT id, title, trecho FROM editais WHERE status = 'novo' AND source IN ('PNCP', 'Imprensa')") as $row) {
+            if (!Editais::onTheme($row['title'] . ' ' . $row['trecho'])) {
+                Db::run("UPDATE editais SET status = 'descartado', analyzed_at = ? WHERE id = ?", [time(), $row['id']]);
+            }
+        }
         $rows = Db::all("SELECT * FROM editais WHERE status = 'novo' ORDER BY id LIMIT $max");
         $r = ['analisados' => 0, 'publicados' => 0, 'revisar' => 0, 'descartados' => 0, 'duplicados' => 0];
         if (!$rows) {

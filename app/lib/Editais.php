@@ -37,6 +37,27 @@ final class Editais
         'duplicado'  => 'Duplicado',
     ];
 
+    /** Termos do tema: itens do PNCP e da imprensa sem nenhum deles nem chegam à análise. */
+    private const THEME = [
+        'moeda social', 'moedas sociais', 'moeda local', 'moeda digital', 'banco comunitário', 'bancos comunitários',
+        'economia solidária', 'mumbuca', 'arariboia', 'renda básica', 'renda mínima', 'transferência de renda',
+        'benefício eventual', 'benefícios eventuais', 'benefício social', 'benefícios sociais', 'cartão benefício',
+        'cartão-benefício', 'cartão alimentação', 'cartão-alimentação', 'cartão social', 'cesta básica', 'cestas básicas',
+        'auxílio alimentação', 'auxílio-alimentação', 'auxílio emergencial', 'auxílio financeiro', 'auxílio municipal',
+        'bolsa família', 'cadúnico', 'cadastro único', 'voucher', 'programa social', 'programa municipal de renda',
+    ];
+
+    public static function onTheme(string $text): bool
+    {
+        $hay = mb_strtolower($text);
+        foreach (self::THEME as $t) {
+            if (str_contains($hay, $t)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static function due(): bool
     {
         $last = (int) (Db::setting('editais_last_run') ?? 0);

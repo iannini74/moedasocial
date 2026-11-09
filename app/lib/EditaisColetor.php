@@ -52,6 +52,10 @@ final class EditaisColetor
                 }
                 $desc = trim((string) ($it['description'] ?? $it['objeto'] ?? ''));
                 $modalidade = (string) ($it['modalidade_licitacao_nome'] ?? '');
+                // A busca do PNCP não aceita frase exata: traz muitas compras fora do tema
+                if (!Editais::onTheme(($it['title'] ?? '') . ' ' . $desc)) {
+                    continue;
+                }
                 $new += (int) Editais::add([
                     'title' => trim((string) ($it['title'] ?? '')) ?: mb_substr($desc, 0, 160),
                     'url' => $link,
@@ -130,6 +134,9 @@ final class EditaisColetor
                     $title = trim(mb_substr($title, 0, -mb_strlen(' - ' . $item['source'])));
                 }
                 $desc = trim(preg_replace('/\s+/', ' ', html_entity_decode(strip_tags($item['desc']), ENT_QUOTES, 'UTF-8')));
+                if (!Editais::onTheme("$title $desc")) {
+                    continue;
+                }
                 $new += (int) Editais::add([
                     'guid' => 'news:' . preg_replace('/[^a-z0-9]/', '', slugify($title)),
                     'title' => $title,

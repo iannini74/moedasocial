@@ -37,7 +37,7 @@ TXT;
             $res = Ai::call([
                 'input' => $prompt,
                 'tools' => [['type' => 'web_search', 'user_location' => ['type' => 'approximate', 'country' => 'BR', 'timezone' => 'America/Sao_Paulo']]],
-            ], 16000, null, 'editais');
+            ], 12000, 'low', 'editais');
             $items = Ai::json($res);
             if ($items === null) {
                 return ['ok' => false, 'encontrados' => 0, 'novos' => 0, 'erro' => 'Resposta sem JSON válido.'];
