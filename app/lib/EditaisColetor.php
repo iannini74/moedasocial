@@ -10,26 +10,67 @@ declare(strict_types=1);
  */
 final class EditaisColetor
 {
-    /** @return array<string, array{ok:bool, encontrados:int, novos:int, erro?:string}> */
+    private const SOURCES = ['pncp' => 'editais.pncp_terms', 'diarios' => 'editais.diario_terms', 'imprensa' => 'editais.news_queries'];
+
+    /** Todas as consultas, de uma vez (cron). @return array<string, array{ok:bool, encontrados:int, novos:int, erro?:string}> */
     public static function run(int $since): array
     {
         $out = [];
-        foreach (['pncp' => 'pncp', 'diarios' => 'diarios', 'imprensa' => 'imprensa'] as $key => $method) {
-            try {
-                $out[$key] = self::$method($since);
-            } catch (Throwable $e) {
-                $out[$key] = ['ok' => false, 'encontrados' => 0, 'novos' => 0, 'erro' => $e->getMessage()];
-            }
+        foreach (self::SOURCES as $key => $terms) {
+            $out[$key] = self::query($key, $since, (array) cfg($terms, []));
             log_line('editais', "Coleta $key: " . json_encode($out[$key], JSON_UNESCAPED_UNICODE));
         }
         return $out;
     }
 
-    private static function pncp(int $since): array
+    /** Lista de consultas [fonte, termo], para a coleta em etapas pela web. */
+    public static function units(): array
+    {
+        $units = [];
+        foreach (self::SOURCES as $key => $terms) {
+            foreach ((array) cfg($terms, []) as $t) {
+                $units[] = [$key, $t];
+            }
+        }
+        return $units;
+    }
+
+    /** Executa uma fonte para os termos informados. */
+    public static function query(string $source, int $since, array $terms): array
+    {
+        try {
+            return match ($source) {
+                'pncp' => self::pncp($since, $terms),
+                'diarios' => self::diarios($since, $terms),
+                'imprensa' => self::imprensa($since, $terms),
+            };
+        } catch (Throwable $e) {
+            return ['ok' => false, 'encontrados' => 0, 'novos' => 0, 'erro' => $e->getMessage()];
+        }
+    }
+
+    /** Soma os resultados parciais de uma fonte (coleta em etapas). */
+    public static function merge(?array $acc, array $r): array
+    {
+        if (!$acc) {
+            return $r + ['consultas' => 1, 'falhas' => $r['ok'] ? 0 : 1];
+        }
+        $acc['encontrados'] += $r['encontrados'];
+        $acc['novos'] += $r['novos'];
+        $acc['consultas']++;
+        $acc['falhas'] += $r['ok'] && empty($r['erro']) ? 0 : 1;
+        $acc['ok'] = $acc['falhas'] < $acc['consultas'];
+        if (!empty($r['erro'])) {
+            $acc['erro'] = $acc['falhas'] . ' de ' . $acc['consultas'] . ' consultas falharam: ' . preg_replace('/^\d+ de \d+ consultas falharam: /', '', $r['erro']);
+        }
+        return $acc;
+    }
+
+    private static function pncp(int $since, array $terms): array
     {
         $found = $new = 0;
         $errors = [];
-        foreach (cfg('editais.pncp_terms', []) as $term) {
+        foreach ($terms as $term) {
             $q = http_build_query(['q' => $term, 'tipos_documento' => 'edital', 'ordenacao' => '-data', 'pagina' => 1, 'tam_pagina' => 20]);
             [$data, $err] = self::getJson(cfg('editais.pncp_url') . '?' . $q);
             if ($data === null) {
@@ -71,14 +112,14 @@ final class EditaisColetor
                 ]);
             }
         }
-        return self::result($found, $new, $errors, count(cfg('editais.pncp_terms', [])));
+        return self::result($found, $new, $errors, count($terms));
     }
 
-    private static function diarios(int $since): array
+    private static function diarios(int $since, array $terms): array
     {
         $found = $new = 0;
         $errors = [];
-        foreach (cfg('editais.diario_terms', []) as $term) {
+        foreach ($terms as $term) {
             $q = http_build_query([
                 'querystring' => $term, 'published_since' => date('Y-m-d', $since), 'size' => 20,
                 'excerpt_size' => 700, 'number_of_excerpts' => 2, 'sort_by' => 'descending_date',
@@ -108,15 +149,15 @@ final class EditaisColetor
                 ]);
             }
         }
-        return self::result($found, $new, $errors, count(cfg('editais.diario_terms', [])));
+        return self::result($found, $new, $errors, count($terms));
     }
 
-    private static function imprensa(int $since): array
+    private static function imprensa(int $since, array $terms): array
     {
         $found = $new = 0;
         $errors = [];
         $days = max(1, (int) ceil((time() - $since) / 86400));
-        foreach (cfg('editais.news_queries', []) as $query) {
+        foreach ($terms as $query) {
             $feed = 'https://news.google.com/rss/search?q=' . rawurlencode("$query when:{$days}d") . '&hl=pt-BR&gl=BR&ceid=BR:pt-419';
             $xml = News::fetch($feed);
             if (!$xml) {
@@ -147,7 +188,7 @@ final class EditaisColetor
                 ]);
             }
         }
-        return self::result($found, $new, $errors, count(cfg('editais.news_queries', [])));
+        return self::result($found, $new, $errors, count($terms));
     }
 
     /** A fonte só é considerada indisponível quando todas as consultas falham. */
@@ -165,7 +206,7 @@ final class EditaisColetor
     {
         $ch = curl_init($url);
         curl_setopt_array($ch, [
-            CURLOPT_RETURNTRANSFER => true, CURLOPT_FOLLOWLOCATION => true, CURLOPT_TIMEOUT => 30, CURLOPT_CONNECTTIMEOUT => 12,
+            CURLOPT_RETURNTRANSFER => true, CURLOPT_FOLLOWLOCATION => true, CURLOPT_TIMEOUT => 15, CURLOPT_CONNECTTIMEOUT => 8,
             CURLOPT_USERAGENT => 'MoedaSocialEditaisBot/1.0 (+' . cfg('site.url') . ')',
             CURLOPT_HTTPHEADER => ['Accept: application/json'], CURLOPT_ENCODING => '',
         ]);

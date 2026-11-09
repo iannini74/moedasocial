@@ -3,7 +3,7 @@ $sourceNames = ['pncp' => 'PNCP', 'diarios' => 'Diários oficiais (Querido Diár
 $last = (int) Db::setting('editais_last_run'); ?>
 <div class="adm-head"><div><h1>Editais</h1>
 <p class="muted">Pesquisa diária com três agentes: coleta, pesquisa na web e análise · última execução: <?= $last ? date_br($last, true) : 'nunca' ?><?= $hasKey ? '' : ' · <b>sem chave da OpenAI: pesquisa web desligada e tudo vai para revisão</b>' ?></p></div>
-<form method="post" onsubmit="this.querySelector('button').disabled=true;this.querySelector('button').textContent='Pesquisando… pode levar alguns minutos'"><input type="hidden" name="_csrf" value="<?= e($csrf) ?>"><input type="hidden" name="do" value="pesquisar"><button class="btn btn-sm btn-primary">Pesquisar agora</button></form></div>
+<form method="post" onsubmit="this.querySelector('button').disabled=true;this.querySelector('button').textContent='Agendando…'"><input type="hidden" name="_csrf" value="<?= e($csrf) ?>"><input type="hidden" name="do" value="pesquisar"><button class="btn btn-sm btn-primary">Pesquisar agora</button></form></div>
 <?php if ($flash): ?><div class="alert alert-ok"><?= e($flash) ?></div><?php endif; ?>
 
 <?php if (!empty($run['fontes'])): ?>

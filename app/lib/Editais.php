@@ -131,8 +131,10 @@ final class Editais
         $webJob = (string) Db::setting('editais_web_job');
         $analysisDue = time() - (int) Db::setting('editais_last_analysis') > 120
             && ((int) Db::setting('editais_rules') < self::RULES_VERSION || Db::value("SELECT id FROM editais WHERE status = 'novo' LIMIT 1"));
+        $queue = json_decode((string) Db::setting('editais_queue'), true);
         match (true) {
-            self::due() => self::withLock(fn() => self::collect()),
+            !empty($queue['units']) => self::withLock(fn() => self::collectSlice($queue)),
+            self::due() => self::withLock(fn() => self::startCollect()),
             $webJob !== '' && time() - (int) Db::setting('editais_web_poll') > 60 => self::withLock(fn() => self::pollResearch($webJob)),
             $webDue => self::withLock(fn() => self::startResearch()),
             (bool) $analysisDue => self::withLock(fn() => self::analyze(15)),
@@ -149,6 +151,44 @@ final class Editais
         $sources = EditaisColetor::run($since);
         self::saveStatus(fn($st) => ['fontes' => $sources + array_intersect_key($st['fontes'] ?? [], ['web' => 1])] + $st);
         return $sources;
+    }
+
+    /** Pela web: monta a fila de consultas da coleta. */
+    private static function startCollect(): void
+    {
+        Db::setting('editais_last_run', (string) time());
+        $first = !Db::value('SELECT id FROM editais LIMIT 1');
+        $since = time() - cfg($first ? 'editais.first_run_days' : 'editais.lookback_days', 10) * 86400;
+        Db::setting('editais_queue', json_encode(['since' => $since, 'units' => EditaisColetor::units(), 'fontes' => []], JSON_UNESCAPED_UNICODE));
+    }
+
+    /** Pela web: executa consultas da fila por até 25 segundos; o restante fica para a próxima visita. */
+    private static function collectSlice(array $queue): void
+    {
+        $start = microtime(true);
+        while ($queue['units'] && microtime(true) - $start < 25) {
+            [$src, $term] = array_shift($queue['units']);
+            $queue['fontes'][$src] = EditaisColetor::merge($queue['fontes'][$src] ?? null, EditaisColetor::query($src, (int) $queue['since'], [$term]));
+            Db::setting('editais_queue', json_encode($queue, JSON_UNESCAPED_UNICODE));
+        }
+        if (!$queue['units']) {
+            Db::setting('editais_queue', '');
+            $sources = $queue['fontes'];
+            log_line('editais', 'Coleta em etapas: ' . json_encode($sources, JSON_UNESCAPED_UNICODE));
+            self::saveStatus(fn($st) => ['fontes' => $sources + array_intersect_key($st['fontes'] ?? [], ['web' => 1])] + $st);
+        }
+    }
+
+    /** Botão do painel: agenda coleta e pesquisa na web, que rodam em etapas nas próximas visitas. */
+    public static function schedule(): string
+    {
+        Db::setting('editais_last_run', '0');
+        Db::setting('editais_lock', '0');
+        Db::setting('editais_queue', '');
+        if (self::researchEnabled() && !Db::setting('editais_web_job')) {
+            Db::setting('editais_last_web', '0');
+        }
+        return 'Pesquisa agendada. Ela roda em etapas curtas a cada visita ao site (inclusive neste painel) e termina em alguns minutos. Recarregue esta página para acompanhar.';
     }
 
     private static function researchEnabled(): bool

@@ -215,9 +215,8 @@ final class Admin
                 Db::run('UPDATE news SET pinned = 1 - pinned WHERE id = ?', [$id]);
                 break;
             case 'editais:pesquisar':
-                set_time_limit(900);
-                $r = Editais::run(true);
-                $_SESSION['flash'] = $r['msg'];
+                // Pela web o tempo de execução é curto: a pesquisa é agendada e roda em etapas
+                $_SESSION['flash'] = Editais::schedule();
                 break;
             case 'editais:status':
                 $to = in_array($_POST['to'] ?? '', ['publicado', 'descartado', 'revisar'], true) ? $_POST['to'] : 'revisar';
