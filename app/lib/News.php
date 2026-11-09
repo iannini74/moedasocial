@@ -111,7 +111,7 @@ final class News
     ];
 
     /** Normaliza itens RSS 2.0 e Atom. */
-    private static function items(SimpleXMLElement $xml): array
+    public static function items(SimpleXMLElement $xml): array
     {
         $out = [];
         foreach ($xml->channel->item ?? [] as $i) {
@@ -137,7 +137,7 @@ final class News
     }
 
     /** Descarta veículos de outros países (Google Notícias mistura Portugal, Espanha etc.). */
-    private static function isForeign(string $url): bool
+    public static function isForeign(string $url): bool
     {
         $host = strtolower((string) parse_url($url, PHP_URL_HOST));
         if ($host === '' || str_ends_with($host, 'news.google.com')) {
@@ -202,7 +202,7 @@ final class News
         return preg_replace('/[^a-z0-9]/', '', slugify($s));
     }
 
-    private static function fetch(string $url): ?SimpleXMLElement
+    public static function fetch(string $url): ?SimpleXMLElement
     {
         $ch = curl_init($url);
         curl_setopt_array($ch, [

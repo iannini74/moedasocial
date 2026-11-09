@@ -98,6 +98,7 @@ final class Seo
             ['/estudos', 'weekly', '0.9', null],
             ['/noticias', 'daily', '0.8', (int) Db::value('SELECT MAX(published_at) FROM news')],
             ['/blog', 'weekly', '0.8', (int) Db::value('SELECT MAX(published_at) FROM posts')],
+            ['/editais', 'daily', '0.85', (int) Db::setting('editais_last_run')],
             ['/perguntas-frequentes', 'monthly', '0.8', null],
             ['/glossario', 'monthly', '0.7', null],
             ['/contato', 'yearly', '0.7', null],
@@ -158,7 +159,7 @@ final class Seo
         $o .= "## Páginas principais\n\n";
         $o .= "- [Por que seu município deve adotar uma moeda social]($site/por-que-adotar-moeda-social): argumentos econômicos, fiscais, sociais e jurídicos\n";
         $o .= "- [Diagnóstico gratuito para municípios]($site/diagnostico): simulador de impacto e roteiro de implantação\n";
-        $o .= "- [Perguntas frequentes]($site/perguntas-frequentes)\n- [Glossário]($site/glossario)\n- [Notícias do setor]($site/noticias)\n\n";
+        $o .= "- [Perguntas frequentes]($site/perguntas-frequentes)\n- [Glossário]($site/glossario)\n- [Notícias do setor]($site/noticias)\n- [Editais de moeda social e benefícios sociais]($site/editais): editais, chamamentos, licitações, leis e decretos pesquisados diariamente\n\n";
         $o .= "## Estudos\n\n";
         foreach (Content::studies() as $s) {
             $o .= "- [{$s['title']}]($site/estudos/{$s['slug']}): {$s['description']}\n";
@@ -179,6 +180,22 @@ final class Seo
             $o .= "\n\n---\n\n# {$s['title']}\n\nURL: $site/estudos/{$s['slug']}\n\n" . Content::plain($s['md']);
         }
         return $o;
+    }
+
+    public static function rssEditais(): string
+    {
+        $site = rtrim(cfg('site.url'), '/');
+        $o = '<?xml version="1.0" encoding="UTF-8"?>' . "\n<rss version=\"2.0\" xmlns:atom=\"http://www.w3.org/2005/Atom\"><channel>\n";
+        $o .= '<title>Editais de moeda social e benefícios sociais</title><link>' . $site . '/editais</link><language>pt-br</language>'
+            . '<description>Editais, chamamentos, licitações, leis e decretos sobre moeda social e benefícios sociais, pesquisados todos os dias.</description>'
+            . '<atom:link href="' . $site . '/editais.xml" rel="self" type="application/rss+xml"/>' . "\n";
+        foreach (Editais::latest(40) as $x) {
+            $place = trim($x['municipio'] . ($x['uf'] ? '/' . $x['uf'] : ''), '/');
+            $o .= '<item><title>' . e($x['title']) . '</title><link>' . e($x['url']) . '</link><guid isPermaLink="false">edital-' . (int) $x['id'] . '</guid>'
+                . '<pubDate>' . date('r', (int) $x['published_at']) . '</pubDate><category>' . e(Editais::CATEGORIES[$x['categoria']] ?? '') . '</category>'
+                . '<description>' . e(($place ? "$place. " : '') . $x['summary']) . "</description></item>\n";
+        }
+        return $o . '</channel></rss>';
     }
 
     public static function rss(): string

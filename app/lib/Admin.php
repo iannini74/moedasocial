@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-/** Área administrativa: analytics completo, contatos, inscritos, diagnósticos, blog e notícias. */
+/** Área administrativa: analytics completo, contatos, inscritos, diagnósticos, blog, notícias e editais. */
 final class Admin
 {
     private static function start(): void
@@ -160,6 +160,15 @@ final class Admin
                 'rows' => Db::all('SELECT * FROM news ORDER BY pinned DESC, published_at DESC LIMIT 300'),
                 'last' => (int) Db::setting('news_last_fetch'), 'flash' => $_SESSION['flash'] ?? null, 'csrf' => $csrf,
             ], 'admin/layout'),
+            'editais' => (function () use ($csrf) {
+                $st = isset(Editais::STATUS[$_GET['status'] ?? '']) ? $_GET['status'] : 'publicado';
+                view('admin/editais', [
+                    'rows' => Db::all('SELECT * FROM editais WHERE status = ? ORDER BY pinned DESC, published_at DESC LIMIT 300', [$st]),
+                    'counts' => array_column(Db::all('SELECT status, COUNT(*) n FROM editais GROUP BY status'), 'n', 'status'),
+                    'status' => $st, 'run' => json_decode((string) Db::setting('editais_status'), true) ?: [],
+                    'hasKey' => Ai::enabled(), 'flash' => $_SESSION['flash'] ?? null, 'csrf' => $csrf,
+                ], 'admin/layout');
+            })(),
             default => not_found(),
         };
         unset($_SESSION['flash']);
@@ -197,6 +206,18 @@ final class Admin
             case 'noticias:fixar':
                 Db::run('UPDATE news SET pinned = 1 - pinned WHERE id = ?', [$id]);
                 break;
+            case 'editais:pesquisar':
+                set_time_limit(900);
+                $r = Editais::run(true);
+                $_SESSION['flash'] = $r['msg'];
+                break;
+            case 'editais:status':
+                $to = in_array($_POST['to'] ?? '', ['publicado', 'descartado', 'revisar'], true) ? $_POST['to'] : 'revisar';
+                Db::run('UPDATE editais SET status = ?, analyzed_at = ? WHERE id = ?', [$to, time(), $id]);
+                break;
+            case 'editais:fixar':
+                Db::run('UPDATE editais SET pinned = 1 - pinned WHERE id = ?', [$id]);
+                break;
             case 'contatos:status':
                 Db::run('UPDATE contacts SET status = ? WHERE id = ?', [in_array($_POST['status'], ['novo', 'em-atendimento', 'proposta', 'fechado', 'descartado'], true) ? $_POST['status'] : 'novo', $id]);
                 break;
@@ -204,7 +225,7 @@ final class Admin
                 Db::run('DELETE FROM subscribers WHERE id = ?', [$id]);   // atendimento a pedido de eliminação (LGPD art. 18)
                 break;
         }
-        redirect('/admin/' . $s);
+        redirect('/admin/' . $s . (isset($_POST['back']) && preg_match('/^[a-z]+$/', (string) $_POST['back']) ? '?status=' . $_POST['back'] : ''));
     }
 
     public static function export(string $type): void

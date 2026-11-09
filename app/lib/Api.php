@@ -106,6 +106,7 @@ final class Api
             'blog' => BlogAgent::run(),
             'newsletter' => ['sent' => Jobs::pendingNewsletters()],
             'manutencao' => Jobs::maintenance(),
+            'editais' => Editais::run(),
             default => ['erro' => 'rotina desconhecida'],
         };
         json_out(['job' => $job, 'result' => $out]);

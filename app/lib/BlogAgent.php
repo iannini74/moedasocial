@@ -5,10 +5,9 @@ declare(strict_types=1);
  * Agente editorial: a cada N dias (padrão 15) pesquisa na web e escreve um
  * artigo original, publica no blog, avisa o IndexNow e dispara a newsletter.
  *
- * Usa a API Responses da OpenAI em duas etapas separadas:
+ * Usa a API Responses da OpenAI (classe Ai) em duas etapas separadas:
  * Etapa 1 — pesquisa com a ferramenta web_search (fatos recentes + fontes).
  * Etapa 2 — redação com saída estruturada (JSON validado por schema).
- * Os modelos de ai.models são tentados em ordem caso algum não esteja disponível.
  */
 final class BlogAgent
 {
@@ -135,7 +134,7 @@ TXT;
             'input' => $prompt,
             'tools' => [['type' => 'web_search', 'user_location' => ['type' => 'approximate', 'country' => 'BR', 'timezone' => 'America/Sao_Paulo']]],
         ]);
-        $text = self::outputText($res);
+        $text = Ai::text($res);
         if (mb_strlen(trim($text)) < 500) {
             throw new RuntimeException('Briefing de pesquisa insuficiente.');
         }
@@ -199,98 +198,30 @@ TXT;
         if (($res['status'] ?? '') === 'incomplete') {
             throw new RuntimeException('A redação ficou incompleta (' . ($res['incomplete_details']['reason'] ?? 'motivo desconhecido') . ').');
         }
-        $data = json_decode(self::outputText($res), true);
+        $data = json_decode(Ai::text($res), true);
         if (is_array($data) && !empty($data['title']) && !empty($data['body_markdown'])) {
             return $data;
         }
         throw new RuntimeException('Resposta da redação sem JSON válido.');
     }
 
-    private static string $lastModel = '';
-
     /** Testa a chave e o acesso aos modelos sem gerar nem publicar artigo. */
     public static function testConnection(): array
     {
-        if (!cfg('ai.openai_api_key')) {
+        if (!Ai::enabled()) {
             return ['ok' => false, 'msg' => 'Chave da OpenAI não configurada.'];
         }
         try {
-            $res = self::call(['input' => 'Responda apenas com a palavra: ok'], 400);
-            $txt = trim(self::outputText($res));
-            return ['ok' => true, 'msg' => 'Conexão com a OpenAI funcionando. Modelo em uso: ' . self::$lastModel . ($txt !== '' ? ' (resposta: "' . mb_substr($txt, 0, 40) . '")' : '') . '.'];
+            $res = Ai::call(['input' => 'Responda apenas com a palavra: ok'], 400);
+            $txt = trim(Ai::text($res));
+            return ['ok' => true, 'msg' => 'Conexão com a OpenAI funcionando. Modelo em uso: ' . Ai::$lastModel . ($txt !== '' ? ' (resposta: "' . mb_substr($txt, 0, 40) . '")' : '') . '.'];
         } catch (Throwable $e) {
             return ['ok' => false, 'msg' => $e->getMessage()];
         }
     }
 
-    /** Chama a API Responses da OpenAI, tentando os modelos configurados em ordem. */
-    private static function call(array $payload, int $maxTokens = 32000): array
+    private static function call(array $payload): array
     {
-        $models = (array) cfg('ai.models', ['gpt-5']);
-        $lastError = 'nenhum modelo configurado';
-        foreach ($models as $model) {
-            $body = $payload + ['model' => $model, 'max_output_tokens' => $maxTokens, 'store' => false];
-            if (str_starts_with($model, 'gpt-5') || str_starts_with($model, 'o')) {
-                $body['reasoning'] = ['effort' => $maxTokens < 1000 ? 'low' : cfg('ai.reasoning_effort', 'medium')];
-            }
-            [$code, $res] = self::post(rtrim((string) cfg('ai.openai_base_url', 'https://api.openai.com/v1'), '/') . '/responses', $body);
-            if ($code === 200 && is_array($res)) {
-                self::$lastModel = $model;
-                return $res;
-            }
-            $err = $res['error'] ?? [];
-            $lastError = "HTTP $code" . (isset($err['message']) ? ': ' . $err['message'] : '');
-            // Modelo inexistente ou sem acesso: tenta o próximo. Outros erros interrompem.
-            $modelProblem = in_array($code, [400, 403, 404], true)
-                && preg_match('/model|does not exist|not found|access/i', (string) ($err['message'] ?? '') . ' ' . ($err['code'] ?? ''));
-            if (!$modelProblem) {
-                break;
-            }
-            log_line('blog-agent', "Modelo $model indisponível ($lastError); tentando o próximo.");
-        }
-        throw new RuntimeException('Erro da API OpenAI — ' . $lastError);
-    }
-
-    private static function post(string $url, array $body): array
-    {
-        $ch = curl_init($url);
-        curl_setopt_array($ch, [
-            CURLOPT_POST => true,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_TIMEOUT => 900,
-            CURLOPT_CONNECTTIMEOUT => 20,
-            CURLOPT_HTTPHEADER => [
-                'Content-Type: application/json',
-                'Authorization: Bearer ' . cfg('ai.openai_api_key'),
-            ],
-            CURLOPT_POSTFIELDS => json_encode($body, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
-        ]);
-        $raw = curl_exec($ch);
-        $code = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        $err = curl_error($ch);
-        curl_close($ch);
-        if ($raw === false) {
-            throw new RuntimeException('Falha de conexão com a API OpenAI: ' . $err);
-        }
-        return [$code, json_decode((string) $raw, true)];
-    }
-
-    /** Junta os textos de saída (itens "message" → "output_text"). */
-    private static function outputText(array $res): string
-    {
-        $text = '';
-        foreach ($res['output'] ?? [] as $item) {
-            if (($item['type'] ?? '') !== 'message') {
-                continue;
-            }
-            foreach ($item['content'] ?? [] as $c) {
-                if (($c['type'] ?? '') === 'output_text') {
-                    $text .= $c['text'];
-                } elseif (($c['type'] ?? '') === 'refusal') {
-                    throw new RuntimeException('O modelo recusou a solicitação.');
-                }
-            }
-        }
-        return $text;
+        return Ai::call($payload, 32000, null, 'blog-agent');
     }
 }

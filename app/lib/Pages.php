@@ -124,6 +124,38 @@ final class Pages
         ]);
     }
 
+    public static function editais(): void
+    {
+        $f = [
+            'categoria' => isset(Editais::CATEGORIES[$_GET['categoria'] ?? '']) ? $_GET['categoria'] : null,
+            'uf' => in_array($_GET['uf'] ?? '', ufs(), true) ? $_GET['uf'] : null,
+            'abertos' => !empty($_GET['abertos']),
+        ];
+        $page = max(1, (int) ($_GET['pagina'] ?? 1));
+        $per = 20;
+        $filtered = $f['categoria'] || $f['uf'] || $f['abertos'];
+        view('pages/editais', [
+            'meta' => [
+                'title' => $f['categoria'] ? 'Editais: ' . Editais::CATEGORIES[$f['categoria']] : 'Editais de moeda social e benefícios sociais',
+                'description' => 'Editais, chamamentos, licitações, leis e decretos sobre moeda social, distribuição de benefícios e programas sociais de municípios e estados. Pesquisa atualizada todos os dias.',
+                'path' => '/editais' . ($f['categoria'] ? '?categoria=' . $f['categoria'] : ''),
+                'robots' => $page > 1 || $f['uf'] || $f['abertos'] ? 'noindex,follow' : null,
+                'schema' => [
+                    Seo::breadcrumbs(['Início' => '/', 'Editais' => '/editais']),
+                    ['@context' => 'https://schema.org', '@type' => 'CollectionPage', 'name' => 'Editais de moeda social e benefícios sociais',
+                        'url' => url('/editais', true), 'inLanguage' => 'pt-BR', 'dateModified' => date('c', (int) Db::setting('editais_last_run') ?: time())],
+                ],
+            ],
+            'items' => Editais::latest($per, $f, ($page - 1) * $per),
+            'total' => Editais::count($f),
+            'all' => $filtered ? Editais::count() : null,
+            'states' => Editais::states(),
+            'f' => $f,
+            'page' => $page,
+            'per' => $per,
+        ]);
+    }
+
     public static function blog(): void
     {
         $page = max(1, (int) ($_GET['pagina'] ?? 1));

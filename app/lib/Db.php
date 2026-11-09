@@ -7,7 +7,7 @@ declare(strict_types=1);
 final class Db
 {
     private static ?PDO $pdo = null;
-    private const SCHEMA_VERSION = 3;
+    private const SCHEMA_VERSION = 4;
 
     public static function pdo(): PDO
     {
@@ -247,6 +247,29 @@ final class Db
                 updated_at INTEGER,
                 notified_at INTEGER
             )",
+            "editais (
+                id $pk,
+                guid {$str(64)} NOT NULL UNIQUE,
+                tkey {$str(64)},
+                status {$str(20)} NOT NULL DEFAULT 'novo',
+                title {$str(400)} NOT NULL,
+                orgao {$str(255)},
+                municipio {$str(150)},
+                uf {$str(2)},
+                categoria {$str(40)},
+                tipo {$str(40)},
+                summary $text,
+                trecho $text,
+                url {$str(1000)} NOT NULL,
+                source {$str(60)},
+                published_at INTEGER,
+                deadline_at INTEGER,
+                valor REAL,
+                confianca INTEGER,
+                pinned INTEGER DEFAULT 0,
+                created_at INTEGER,
+                analyzed_at INTEGER
+            )",
             "rate_limits (
                 id $pk,
                 k {$str(120)} NOT NULL,
@@ -267,6 +290,8 @@ final class Db
             'idx_news_pub'    => 'news (published_at)',
             'idx_posts_pub'   => 'posts (status, published_at)',
             'idx_rl_k'        => 'rate_limits (k, ts)',
+            'idx_ed_status'   => 'editais (status, published_at)',
+            'idx_ed_tkey'     => 'editais (tkey)',
         ];
         foreach ($indexes as $name => $def) {
             try {

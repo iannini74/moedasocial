@@ -6,7 +6,9 @@
  *   php /home/USUARIO/domains/moedasocial.com/public_html/cron/run.php blog        (1x por dia; publica a cada 15 dias)
  *   php /home/USUARIO/domains/moedasocial.com/public_html/cron/run.php newsletter  (a cada hora; envia em lotes)
  *   php /home/USUARIO/domains/moedasocial.com/public_html/cron/run.php manutencao  (1x por semana)
+ *   php /home/USUARIO/domains/moedasocial.com/public_html/cron/run.php editais     (1x por dia; agentes de editais)
  *   php .../cron/run.php blog --force                                               (gera um artigo agora)
+ *   php .../cron/run.php editais --force                                            (pesquisa editais agora)
  */
 if (PHP_SAPI !== 'cli') {
     http_response_code(404);
@@ -23,10 +25,11 @@ $result = match ($job) {
     'blog' => BlogAgent::run($force),
     'newsletter' => ['enviados' => Jobs::pendingNewsletters()],
     'manutencao' => Jobs::maintenance(),
+    'editais' => Editais::run($force),
     default => null,
 };
 if ($result === null) {
-    fwrite(STDERR, "Uso: php cron/run.php news|blog|newsletter|manutencao [--force]\n");
+    fwrite(STDERR, "Uso: php cron/run.php news|blog|newsletter|manutencao|editais [--force]\n");
     exit(1);
 }
 $line = sprintf('[%s] %s (%.1fs): %s', date('Y-m-d H:i:s'), $job, microtime(true) - $start, json_encode($result, JSON_UNESCAPED_UNICODE));

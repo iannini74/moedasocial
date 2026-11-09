@@ -601,3 +601,24 @@ legend { font: 700 18px var(--f-display); color: var(--navy); margin-bottom: 14p
 .hp-timeline { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; position: relative; }
 .hp-timeline li { display: grid; grid-template-columns: 64px 1fr; gap: 10px; color: #E5E9EE; font-size: 14.5px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,.08); }
 .hp-timeline b { font: 600 12px var(--f-mono); color: var(--mint); text-transform: uppercase; letter-spacing: .06em; padding-top: 2px; }
+
+/* Editais */
+.icon-xs { width: 14px; height: 14px; display: inline-block; vertical-align: -2px; flex: none; }
+.ed-filter { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; margin: -8px 0 24px; font-size: 14px; color: var(--ink-2); }
+.ed-filter label { display: inline-flex; align-items: center; gap: 8px; font-weight: 500; }
+.ed-filter select { min-height: 40px; padding: 6px 10px; border: 1px solid var(--border-strong); border-radius: 10px; background: var(--surface); font: inherit; color: var(--ink); }
+.ed-check input { width: 18px; height: 18px; accent-color: var(--green-ink); }
+.ed-count { color: var(--muted); margin-left: auto; }
+.edital .tag .icon-xs { vertical-align: 0; }
+.ed-foot { display: flex; flex-wrap: wrap; gap: 6px 16px; align-items: center; margin-top: 10px; font-size: 13px; color: var(--muted); }
+.ed-foot > span { display: inline-flex; align-items: center; gap: 5px; }
+.ed-deadline.is-open { color: var(--green-ink); font-weight: 600; }
+.ed-source { display: inline-flex; align-items: center; gap: 4px; margin-left: auto; font-weight: 600; color: var(--blue-ink); text-decoration: none; }
+.ed-source:hover { text-decoration: underline; }
+.ed-agents { list-style: none; padding: 0; margin: 0 0 12px; display: grid; gap: 12px; font-size: 14px; color: var(--ink-2); }
+.ed-agents li { display: grid; grid-template-columns: 32px 1fr; gap: 10px; align-items: start; }
+.ed-agents li > span { width: 32px; height: 32px; border-radius: 10px; display: grid; place-items: center; background: var(--green-soft); color: var(--green-ink); }
+.ed-agents li > span .icon-sm { margin: 0; vertical-align: 0; }
+.ed-agents strong { color: var(--navy); }
+.aside-box .ed-note { font-size: 12.5px; color: var(--muted); margin: 0; }
+@media (max-width: 640px) { .ed-source { margin-left: 0; } .ed-count { margin-left: 0; width: 100%; } }

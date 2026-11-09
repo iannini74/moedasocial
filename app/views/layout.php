@@ -10,6 +10,7 @@ $nav = [
     '/estudos' => 'Estudos',
     '/por-que-adotar-moeda-social' => 'Por que adotar',
     '/noticias' => 'Notícias',
+    '/editais' => 'Editais',
     '/blog' => 'Blog',
     '/perguntas-frequentes' => 'FAQ',
     '/contato' => 'Contato',
@@ -48,6 +49,7 @@ $nav = [
 <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
 <link rel="manifest" href="/assets/site.webmanifest">
 <link rel="alternate" type="application/rss+xml" title="Blog Moeda Social" href="/feed.xml">
+<link rel="alternate" type="application/rss+xml" title="Editais de moeda social e benefícios" href="/editais.xml">
 <link rel="alternate" type="text/markdown" title="Resumo para assistentes de IA" href="/llms.txt">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -117,6 +119,7 @@ $nav = [
         <li><a href="/por-que-adotar-moeda-social">Por que adotar</a></li>
         <li><a href="/diagnostico">Diagnóstico gratuito</a></li>
         <li><a href="/noticias">Notícias</a></li>
+        <li><a href="/editais">Editais</a></li>
         <li><a href="/blog">Blog</a></li>
         <li><a href="/perguntas-frequentes">Perguntas frequentes</a></li>
         <li><a href="/glossario">Glossário</a></li>

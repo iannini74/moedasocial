@@ -99,6 +99,40 @@ return [
         ],
     ],
 
+    'editais' => [
+        // Pesquisa diária de editais, chamamentos, licitações, leis e decretos (cron "editais")
+        'refresh_hours'   => 24,
+        'lookback_days'   => 10,     // janela de busca nas execuções diárias
+        'first_run_days'  => 90,     // janela da primeira execução
+        'min_confidence'  => 70,     // abaixo disso o item vai para revisão no painel
+        'max_analyze'     => 80,     // itens analisados pela IA por execução
+        'web_research'    => true,   // agente de pesquisa na web (OpenAI web_search)
+        'pncp_url'        => 'https://pncp.gov.br/api/search/',
+        'diario_url'      => 'https://api.queridodiario.org.br/gazettes',
+        // Portal Nacional de Contratações Públicas: editais, avisos de contratação e credenciamentos
+        'pncp_terms' => [
+            'moeda social', 'moeda digital social', 'banco comunitário', 'cartão benefício social',
+            'benefício eventual cartão', 'cesta básica cartão', 'auxílio alimentação programa social',
+            'transferência de renda', 'renda básica',
+        ],
+        // Diários oficiais municipais (Querido Diário): leis, decretos, chamamentos e credenciamentos
+        'diario_terms' => [
+            '"moeda social"', '"moeda digital" programa municipal', '"banco comunitário"',
+            '"renda básica" lei municipal', '"transferência de renda" programa municipal',
+            '"cartão benefício" programa social', 'credenciamento estabelecimentos "moeda"',
+        ],
+        // Google Notícias: anúncios de editais e programas na imprensa e em sites oficiais
+        'news_queries' => [
+            '"moeda social" edital OR chamamento OR credenciamento OR licitação',
+            '"moeda social" lei OR decreto prefeitura',
+            'prefeitura lança "moeda social"',
+            '"moeda digital" prefeitura benefício comércio local',
+            'licitação "cartão benefício" prefeitura programa social',
+            'prefeitura "inscrições abertas" auxílio OR "renda básica" OR "transferência de renda"',
+            'site:gov.br chamamento público "economia solidária" OR "banco comunitário"',
+        ],
+    ],
+
     'analytics' => [
         // Provedor de geolocalização por IP (consulta servidor-a-servidor, IP nunca é armazenado)
         'geo_provider'   => 'ipwho',   // ipwho | none
