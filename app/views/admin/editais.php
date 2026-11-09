@@ -19,6 +19,7 @@ $last = (int) Db::setting('editais_last_run'); ?>
 </tbody></table></div></section>
 <?php endif; ?>
 
+<?php if ($reanalysis): ?><p class="muted" style="margin:16px 0 0"><?= $reanalysis ?> itens em reanálise pelas regras atualizadas. Eles continuam no status atual (e visíveis, se publicados) até a nova análise.</p><?php endif; ?>
 <nav class="filters" style="margin:20px 0 12px">
 <?php foreach (Editais::STATUS as $k => $v): ?><a href="/admin/editais?status=<?= $k ?>" class="<?= $status === $k ? 'on' : '' ?>"><?= e($v) ?> (<?= (int) ($counts[$k] ?? 0) ?>)</a><?php endforeach; ?>
 </nav>

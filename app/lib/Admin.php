@@ -165,6 +165,7 @@ final class Admin
                 view('admin/editais', [
                     'rows' => Db::all('SELECT * FROM editais WHERE status = ? ORDER BY pinned DESC, published_at DESC LIMIT 300', [$st]),
                     'counts' => array_column(Db::all('SELECT status, COUNT(*) n FROM editais GROUP BY status'), 'n', 'status'),
+                    'reanalysis' => (int) Db::value("SELECT COUNT(*) FROM editais WHERE analyzed_at IS NULL AND status <> 'novo'"),
                     'status' => $st, 'run' => json_decode((string) Db::setting('editais_status'), true) ?: [],
                     'hasKey' => Ai::enabled(), 'flash' => $_SESSION['flash'] ?? null, 'csrf' => $csrf,
                 ], 'admin/layout');

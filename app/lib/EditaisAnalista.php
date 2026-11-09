@@ -25,18 +25,24 @@ final class EditaisAnalista
     public static function run(int $max): array
     {
         // Itens do PNCP e da imprensa sem nenhum termo do tema são descartados sem gastar IA
-        foreach (Db::all("SELECT id, title, summary, trecho FROM editais WHERE status = 'novo' AND source IN ('PNCP', 'Imprensa')") as $row) {
+        foreach (Db::all('SELECT id, title, summary, trecho FROM editais WHERE ' . Editais::PENDING . " AND source IN ('PNCP', 'Imprensa')") as $row) {
             if (!Editais::onTheme($row['title'] . ' ' . $row['summary'] . ' ' . $row['trecho'])) {
                 Db::run("UPDATE editais SET status = 'descartado', analyzed_at = ? WHERE id = ?", [time(), $row['id']]);
             }
         }
-        $rows = Db::all("SELECT * FROM editais WHERE status = 'novo' ORDER BY id LIMIT $max");
+        // Novos primeiro; depois os que estão em reanálise
+        $rows = Db::all('SELECT * FROM editais WHERE ' . Editais::PENDING . " ORDER BY CASE WHEN status = 'novo' THEN 0 ELSE 1 END, id LIMIT $max");
         $r = ['analisados' => 0, 'publicados' => 0, 'revisar' => 0, 'descartados' => 0, 'duplicados' => 0];
         if (!$rows) {
             return $r;
         }
         if (!Ai::enabled()) {
             foreach ($rows as $row) {
+                if ($row['status'] !== 'novo') {
+                    // Reanálise sem IA: mantém a decisão anterior
+                    Db::run('UPDATE editais SET analyzed_at = ? WHERE id = ?', [time(), $row['id']]);
+                    continue;
+                }
                 $cat = self::keywordCategory($row['title'] . ' ' . $row['trecho']);
                 self::save((int) $row['id'], $cat ? 'revisar' : 'descartado', ['categoria' => $cat ?? '']);
                 $r['analisados']++;

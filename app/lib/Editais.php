@@ -42,6 +42,13 @@ final class Editais
         'duplicado'  => 'Duplicado',
     ];
 
+    /**
+     * Itens à espera do agente de análise: os novos e os marcados para reanálise
+     * (analyzed_at nulo). Na reanálise o item mantém o status atual, então o que
+     * já está publicado continua visível até a nova decisão.
+     */
+    public const PENDING = "(status = 'novo' OR analyzed_at IS NULL)";
+
     /** Termos do tema: itens do PNCP e da imprensa sem nenhum deles nem chegam à análise. */
     private const THEME = [
         'moeda social', 'moedas sociais', 'moeda local', 'moeda digital', 'moeda própria', 'moeda municipal',
@@ -68,8 +75,8 @@ final class Editais
 
     /**
      * Versão das regras de análise. Ao mudar as regras, aumente o número: os itens
-     * dos últimos 60 dias (exceto os fixados) voltam uma vez para a fila e são
-     * analisados de novo.
+     * dos últimos 60 dias (exceto os fixados) são analisados de novo uma vez,
+     * sem sair do ar enquanto aguardam.
      */
     private const RULES_VERSION = 6;
 
@@ -79,8 +86,7 @@ final class Editais
             return;
         }
         // Os descartados que não tiverem termos do tema voltam a ser descartados sem custo de IA
-        Db::run("UPDATE editais SET status = 'novo' WHERE pinned = 0 AND created_at > ?
-            AND status IN ('publicado', 'revisar', 'duplicado', 'descartado')", [time() - 60 * 86400]);
+        Db::run("UPDATE editais SET analyzed_at = NULL WHERE pinned = 0 AND created_at > ? AND status <> 'novo'", [time() - 60 * 86400]);
         Db::setting('editais_rules', (string) self::RULES_VERSION);
     }
 
@@ -130,7 +136,7 @@ final class Editais
         $webDue = self::researchEnabled() && time() - (int) Db::setting('editais_last_web') > cfg('editais.refresh_hours', 24) * 3600 - 1800;
         $webJob = (string) Db::setting('editais_web_job');
         $analysisDue = time() - (int) Db::setting('editais_last_analysis') > 120
-            && ((int) Db::setting('editais_rules') < self::RULES_VERSION || Db::value("SELECT id FROM editais WHERE status = 'novo' LIMIT 1"));
+            && ((int) Db::setting('editais_rules') < self::RULES_VERSION || Db::value('SELECT id FROM editais WHERE ' . self::PENDING . ' LIMIT 1'));
         $queue = json_decode((string) Db::setting('editais_queue'), true);
         match (true) {
             !empty($queue['units']) => self::withLock(fn() => self::collectSlice($queue)),
