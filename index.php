@@ -50,11 +50,7 @@ register_shutdown_function(function () {
         if (!$detached) {
             return;
         }
-        if (Editais::due()) {
-            Editais::run();
-        } elseif (Editais::pending()) {
-            Editais::analyzePending();
-        }
+        Editais::step();
     } catch (Throwable $e) {
         log_line('editais', 'Erro: ' . $e->getMessage());
     }

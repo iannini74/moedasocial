@@ -43,92 +43,125 @@ final class Editais
         return time() - $last > cfg('editais.refresh_hours', 24) * 3600 - 1800;
     }
 
-    /** Executa os três agentes. Cada fonte falha de forma isolada, sem interromper as demais. */
+    /**
+     * Executa os três agentes de uma vez (cron e botão do painel).
+     * Cada fonte falha de forma isolada, sem interromper as demais.
+     */
     public static function run(bool $force = false): array
     {
         if (!$force && !self::due()) {
             return ['ok' => false, 'msg' => 'Pesquisa já feita nas últimas ' . cfg('editais.refresh_hours') . ' horas.'];
         }
-        $lock = (int) (Db::setting('editais_lock') ?? 0);
-        if ($lock && time() - $lock < 1800) {
+        if (self::locked()) {
             return ['ok' => false, 'msg' => 'Uma pesquisa já está em andamento.'];
         }
-        Db::setting('editais_lock', (string) time());
-        self::extendTime();
-        $start = time();
-        try {
+        return self::withLock(function () {
             $first = !Db::value('SELECT id FROM editais LIMIT 1');
-            $since = time() - cfg($first ? 'editais.first_run_days' : 'editais.lookback_days', 10) * 86400;
-
-            $sources = EditaisColetor::run($since);
-            if (cfg('editais.web_research', true) && Ai::enabled()) {
-                $sources['web'] = EditaisPesquisador::run($first ? 60 : (int) cfg('editais.lookback_days', 10));
+            $sources = self::collect();
+            if (self::researchEnabled()) {
+                $sources['web'] = self::research();
             }
-            $analysis = EditaisAnalista::run(self::analyzeLimit($first));
-
-            // Descartados e duplicados ficam 90 dias para auditoria e depois são apagados
-            Db::run("DELETE FROM editais WHERE status IN ('descartado','duplicado') AND created_at < ?", [time() - 90 * 86400]);
-
-            $published = (int) Db::value("SELECT COUNT(*) FROM editais WHERE status = 'publicado' AND analyzed_at >= ?", [$start]);
-            if ($published) {
-                Seo::indexNow([url('/editais', true)]);
-            }
-            $status = ['ts' => time(), 'fontes' => $sources, 'analise' => $analysis, 'publicados' => $published];
-            Db::setting('editais_status', json_encode($status, JSON_UNESCAPED_UNICODE));
-            Db::setting('editais_last_run', (string) time());
-            Db::setting('editais_last_analysis', (string) time());
+            // Na primeira execução o acúmulo dos últimos meses é analisado de uma vez
+            $analysis = self::analyze($first ? 400 : (int) cfg('editais.max_analyze', 80));
             $found = array_sum(array_column($sources, 'novos'));
-            $msg = "Pesquisa concluída: $found itens novos encontrados, {$analysis['analisados']} analisados, $published publicados, {$analysis['revisar']} para revisar.";
+            $msg = "Pesquisa concluída: $found itens novos encontrados, {$analysis['analisados']} analisados, {$analysis['publicados']} publicados, {$analysis['revisar']} para revisar.";
             log_line('editais', $msg);
-            return ['ok' => true, 'msg' => $msg] + $status;
-        } catch (Throwable $e) {
-            log_line('editais', 'ERRO: ' . $e->getMessage());
-            return ['ok' => false, 'msg' => $e->getMessage()];
-        } finally {
-            Db::setting('editais_lock', '0');
-        }
+            return ['ok' => true, 'msg' => $msg, 'fontes' => $sources, 'analise' => $analysis];
+        });
     }
 
-    private static function extendTime(): void
+    /**
+     * Contingência sem cron, chamada depois que a página já foi entregue ao visitante.
+     * Pela web o tempo de execução é limitado, então cada visita faz uma única etapa:
+     * coleta, pesquisa na web ou um lote de análise.
+     */
+    public static function step(): void
     {
+        if (self::locked()) {
+            return;
+        }
+        $webDue = self::researchEnabled() && time() - (int) Db::setting('editais_last_web') > cfg('editais.refresh_hours', 24) * 3600 - 1800;
+        $analysisDue = time() - (int) Db::setting('editais_last_analysis') > 120
+            && Db::value("SELECT id FROM editais WHERE status = 'novo' LIMIT 1");
+        match (true) {
+            self::due() => self::withLock(fn() => self::collect()),
+            $webDue => self::withLock(fn() => self::research()),
+            (bool) $analysisDue => self::withLock(fn() => self::analyze(15)),
+            default => null,
+        };
+    }
+
+    /** Agente de coleta. A data de execução é gravada antes: se o processo cair, não repete em seguida. */
+    private static function collect(): array
+    {
+        Db::setting('editais_last_run', (string) time());
+        $first = !Db::value('SELECT id FROM editais LIMIT 1');
+        $since = time() - cfg($first ? 'editais.first_run_days' : 'editais.lookback_days', 10) * 86400;
+        $sources = EditaisColetor::run($since);
+        self::saveStatus(fn($st) => ['fontes' => $sources + array_intersect_key($st['fontes'] ?? [], ['web' => 1])] + $st);
+        return $sources;
+    }
+
+    private static function researchEnabled(): bool
+    {
+        return cfg('editais.web_research', true) && Ai::enabled();
+    }
+
+    /** Agente de pesquisa na web. */
+    private static function research(): array
+    {
+        Db::setting('editais_last_web', (string) time());
+        $first = !Db::value("SELECT id FROM editais WHERE source = 'Pesquisa web' LIMIT 1");
+        $r = EditaisPesquisador::run($first ? 60 : (int) cfg('editais.lookback_days', 10));
+        log_line('editais', 'Pesquisa web: ' . json_encode($r, JSON_UNESCAPED_UNICODE));
+        self::saveStatus(function ($st) use ($r) {
+            $st['fontes']['web'] = $r;
+            return $st;
+        });
+        return $r;
+    }
+
+    /** Agente de análise, seguido da limpeza e do aviso ao IndexNow. */
+    private static function analyze(int $max): array
+    {
+        Db::setting('editais_last_analysis', (string) time());
+        $r = EditaisAnalista::run($max);
+        // Descartados e duplicados ficam 90 dias para auditoria e depois são apagados
+        Db::run("DELETE FROM editais WHERE status IN ('descartado','duplicado') AND created_at < ?", [time() - 90 * 86400]);
+        if ($r['publicados']) {
+            Seo::indexNow([url('/editais', true)]);
+        }
+        if ($r['analisados'] || !empty($r['erro'])) {
+            log_line('editais', 'Análise: ' . json_encode($r, JSON_UNESCAPED_UNICODE));
+            self::saveStatus(fn($st) => ['analise' => $r] + $st);
+        }
+        return $r;
+    }
+
+    private static function saveStatus(callable $change): void
+    {
+        $st = json_decode((string) Db::setting('editais_status'), true) ?: [];
+        Db::setting('editais_status', json_encode(['ts' => time()] + $change($st), JSON_UNESCAPED_UNICODE));
+    }
+
+    private static function locked(): bool
+    {
+        $lock = (int) (Db::setting('editais_lock') ?? 0);
+        return $lock && time() - $lock < 900;
+    }
+
+    private static function withLock(callable $fn): mixed
+    {
+        Db::setting('editais_lock', (string) time());
         if (PHP_SAPI !== 'cli') {
             ignore_user_abort(true);
             @set_time_limit(600);
         }
-    }
-
-    /** Pela web (contingência) o tempo de execução é curto: analisa em lotes menores. */
-    private static function analyzeLimit(bool $first = false): int
-    {
-        if (PHP_SAPI !== 'cli') {
-            return 45;
-        }
-        // Na primeira execução o acúmulo dos últimos meses é analisado de uma vez
-        return $first ? 400 : (int) cfg('editais.max_analyze', 80);
-    }
-
-    /** Há itens aguardando análise e nenhuma execução em andamento. */
-    public static function pending(): bool
-    {
-        $lock = (int) (Db::setting('editais_lock') ?? 0);
-        return !($lock && time() - $lock < 1800)
-            && time() - (int) (Db::setting('editais_last_analysis') ?? 0) > 600
-            && Db::value("SELECT id FROM editais WHERE status = 'novo' LIMIT 1");
-    }
-
-    /** Continua a análise dos itens que ficaram para trás (contingência sem cron). */
-    public static function analyzePending(): array
-    {
-        Db::setting('editais_lock', (string) time());
-        Db::setting('editais_last_analysis', (string) time());
-        self::extendTime();
         try {
-            $r = EditaisAnalista::run(self::analyzeLimit());
-            log_line('editais', 'Análise pendente: ' . json_encode($r, JSON_UNESCAPED_UNICODE));
-            if ($r['publicados']) {
-                Seo::indexNow([url('/editais', true)]);
-            }
-            return $r;
+            return $fn();
+        } catch (Throwable $e) {
+            log_line('editais', 'ERRO: ' . $e->getMessage());
+            return ['ok' => false, 'msg' => $e->getMessage()];
         } finally {
             Db::setting('editais_lock', '0');
         }
