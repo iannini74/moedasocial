@@ -65,7 +65,7 @@ final class EditaisAnalista
                     $a['confianca'] >= 40 => 'revisar',
                     default => 'descartado',
                 };
-                self::save($id, $status, $a);
+                self::save($id, $status, $a + ['source' => $batch[array_search($id, $ids, true)]['source']]);
                 $r['analisados']++;
                 $r[['publicado' => 'publicados', 'revisar' => 'revisar', 'descartado' => 'descartados', 'duplicado' => 'duplicados'][$status]]++;
             }
@@ -91,8 +91,10 @@ final class EditaisAnalista
             if ($ts = Editais::toTs($a['data_publicacao'])) {
                 $set['published_at'] = min($ts, time());
             }
-            if ($ts = Editais::toTs($a['prazo'])) {
-                $set['deadline_at'] = $ts;
+            // O prazo do PNCP vem da própria fonte; nas demais, vale só o que a análise encontrar
+            $deadline = Editais::toTs($a['prazo']);
+            if ($deadline || ($a['source'] ?? '') !== 'PNCP') {
+                $set['deadline_at'] = $deadline;
             }
             if ((float) $a['valor'] > 0) {
                 $set['valor'] = (float) $a['valor'];

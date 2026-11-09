@@ -71,7 +71,7 @@ final class Editais
      * dos últimos 60 dias (exceto os fixados) voltam uma vez para a fila e são
      * analisados de novo.
      */
-    private const RULES_VERSION = 5;
+    private const RULES_VERSION = 6;
 
     private static function reprocessIfRulesChanged(): void
     {
