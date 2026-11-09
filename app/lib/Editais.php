@@ -54,6 +54,7 @@ final class Editais
             return ['ok' => false, 'msg' => 'Uma pesquisa já está em andamento.'];
         }
         Db::setting('editais_lock', (string) time());
+        self::extendTime();
         $start = time();
         try {
             $first = !Db::value('SELECT id FROM editais LIMIT 1');
@@ -63,8 +64,7 @@ final class Editais
             if (cfg('editais.web_research', true) && Ai::enabled()) {
                 $sources['web'] = EditaisPesquisador::run($first ? 60 : (int) cfg('editais.lookback_days', 10));
             }
-            // Na primeira execução o acúmulo dos últimos meses é analisado de uma vez
-            $analysis = EditaisAnalista::run($first ? 400 : (int) cfg('editais.max_analyze', 80));
+            $analysis = EditaisAnalista::run(self::analyzeLimit($first));
 
             // Descartados e duplicados ficam 90 dias para auditoria e depois são apagados
             Db::run("DELETE FROM editais WHERE status IN ('descartado','duplicado') AND created_at < ?", [time() - 90 * 86400]);
@@ -76,6 +76,7 @@ final class Editais
             $status = ['ts' => time(), 'fontes' => $sources, 'analise' => $analysis, 'publicados' => $published];
             Db::setting('editais_status', json_encode($status, JSON_UNESCAPED_UNICODE));
             Db::setting('editais_last_run', (string) time());
+            Db::setting('editais_last_analysis', (string) time());
             $found = array_sum(array_column($sources, 'novos'));
             $msg = "Pesquisa concluída: $found itens novos encontrados, {$analysis['analisados']} analisados, $published publicados, {$analysis['revisar']} para revisar.";
             log_line('editais', $msg);
@@ -83,6 +84,51 @@ final class Editais
         } catch (Throwable $e) {
             log_line('editais', 'ERRO: ' . $e->getMessage());
             return ['ok' => false, 'msg' => $e->getMessage()];
+        } finally {
+            Db::setting('editais_lock', '0');
+        }
+    }
+
+    private static function extendTime(): void
+    {
+        if (PHP_SAPI !== 'cli') {
+            ignore_user_abort(true);
+            @set_time_limit(600);
+        }
+    }
+
+    /** Pela web (contingência) o tempo de execução é curto: analisa em lotes menores. */
+    private static function analyzeLimit(bool $first = false): int
+    {
+        if (PHP_SAPI !== 'cli') {
+            return 45;
+        }
+        // Na primeira execução o acúmulo dos últimos meses é analisado de uma vez
+        return $first ? 400 : (int) cfg('editais.max_analyze', 80);
+    }
+
+    /** Há itens aguardando análise e nenhuma execução em andamento. */
+    public static function pending(): bool
+    {
+        $lock = (int) (Db::setting('editais_lock') ?? 0);
+        return !($lock && time() - $lock < 1800)
+            && time() - (int) (Db::setting('editais_last_analysis') ?? 0) > 600
+            && Db::value("SELECT id FROM editais WHERE status = 'novo' LIMIT 1");
+    }
+
+    /** Continua a análise dos itens que ficaram para trás (contingência sem cron). */
+    public static function analyzePending(): array
+    {
+        Db::setting('editais_lock', (string) time());
+        Db::setting('editais_last_analysis', (string) time());
+        self::extendTime();
+        try {
+            $r = EditaisAnalista::run(self::analyzeLimit());
+            log_line('editais', 'Análise pendente: ' . json_encode($r, JSON_UNESCAPED_UNICODE));
+            if ($r['publicados']) {
+                Seo::indexNow([url('/editais', true)]);
+            }
+            return $r;
         } finally {
             Db::setting('editais_lock', '0');
         }

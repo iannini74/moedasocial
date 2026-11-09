@@ -29,8 +29,14 @@ if ($method === 'GET' && !str_starts_with($path, '/api/') && !str_starts_with($p
 
 // Rotinas de manutenção executadas após a resposta (contingência caso o cron não esteja configurado)
 register_shutdown_function(function () {
+    // Entrega a resposta ao visitante antes das rotinas (PHP-FPM ou LiteSpeed)
+    $detached = false;
     if (function_exists('fastcgi_finish_request')) {
         fastcgi_finish_request();
+        $detached = true;
+    } elseif (function_exists('litespeed_finish_request')) {
+        litespeed_finish_request();
+        $detached = true;
     }
     try {
         if (News::due()) {
@@ -38,6 +44,19 @@ register_shutdown_function(function () {
         }
     } catch (Throwable $e) {
         log_line('news', 'Erro: ' . $e->getMessage());
+    }
+    // A pesquisa de editais pode levar minutos: só roda se o visitante já foi liberado
+    try {
+        if (!$detached) {
+            return;
+        }
+        if (Editais::due()) {
+            Editais::run();
+        } elseif (Editais::pending()) {
+            Editais::analyzePending();
+        }
+    } catch (Throwable $e) {
+        log_line('editais', 'Erro: ' . $e->getMessage());
     }
 });
 
