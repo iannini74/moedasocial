@@ -23,6 +23,9 @@ final class Editais
         'chamamento'     => 'Chamamento público',
         'credenciamento' => 'Credenciamento',
         'licitacao'      => 'Licitação',
+        'dispensa'       => 'Contratação direta',
+        'contrato'       => 'Contrato ou aditivo',
+        'projeto-lei'    => 'Projeto de lei',
         'lei'            => 'Lei',
         'decreto'        => 'Decreto',
         'inscricoes'     => 'Inscrições abertas',
@@ -62,18 +65,18 @@ final class Editais
 
     /**
      * Versão das regras de análise. Ao mudar as regras, aumente o número: os itens
-     * descartados nos últimos 60 dias (exceto PNCP) voltam uma vez para a fila
-     * e a pesquisa na web é refeita.
+     * dos últimos 60 dias voltam uma vez para a fila e são analisados de novo
+     * (exceto os fixados e as compras do PNCP já descartadas).
      */
-    private const RULES_VERSION = 3;
+    private const RULES_VERSION = 4;
 
     private static function reprocessIfRulesChanged(): void
     {
         if ((int) Db::setting('editais_rules') >= self::RULES_VERSION) {
             return;
         }
-        Db::run("UPDATE editais SET status = 'novo' WHERE status = 'descartado' AND source <> 'PNCP' AND created_at > ?", [time() - 60 * 86400]);
-        Db::setting('editais_last_web', '0');
+        Db::run("UPDATE editais SET status = 'novo' WHERE pinned = 0 AND created_at > ?
+            AND (status IN ('publicado', 'revisar', 'duplicado') OR (status = 'descartado' AND source <> 'PNCP'))", [time() - 60 * 86400]);
         Db::setting('editais_rules', (string) self::RULES_VERSION);
     }
 

@@ -144,10 +144,11 @@ Notícias da imprensa ou de sites oficiais entram quando relatam uma medida ofic
 Marque relevante = false (categoria "nenhuma") para: vale-alimentação ou vale-refeição de servidores públicos, compra de alimentos ou merenda, compras de materiais em geral, feiras, eventos, oficinas e cursos, artigos de opinião, análises, histórias e balanços de resultados sem nova medida, temas de outros países, e qualquer item fora das três categorias.
 
 Regras de escrita:
-- titulo: até 110 caracteres, diz quem fez o quê e onde. Exemplo: "Maricá (RJ) abre credenciamento de comércios para a moeda Mumbuca".
-- resumo: uma ou duas frases diretas, com o objeto, o público e o prazo quando houver. Sem metáforas, sem adjetivos promocionais, sem emojis.
-- Não invente dados: deixe orgao, municipio, uf, prazo e data_publicacao vazios se não estiverem no item; valor = 0 se não houver.
-- tipo: um destes valores: {$tipos}.
+- titulo: até 110 caracteres, diz quem fez o quê e onde, começando por "Município (UF)" ou pelo órgão. Exemplo: "Maricá (RJ) abre credenciamento de comércios para a moeda Mumbuca". Datas no texto sempre no formato brasileiro (14/12/2026).
+- resumo: uma ou duas frases diretas, com o objeto, o público e o prazo quando houver. Escreva só o que se sabe: não comente o que falta no item. Sem metáforas, sem adjetivos promocionais, sem emojis.
+- Não invente dados: deixe orgao, municipio, uf, prazo e data_publicacao vazios se não estiverem no item; valor = 0 se não houver. Município e UF podem ser deduzidos quando o nome da cidade aparece no título ou no trecho e a UF é inequívoca.
+- tipo: um destes valores: {$tipos}. Use "dispensa" para contratação direta, dispensa ou inexigibilidade; "contrato" para extrato de contrato ou termo aditivo; "projeto-lei" para projeto de lei ainda não aprovado; "anuncio" para notícia sobre medida oficial.
+- prazo: só a data-limite para enviar propostas, fazer inscrição ou aderir. Data de pagamento de benefício não é prazo.
 - data_publicacao e prazo no formato AAAA-MM-DD. Hoje é {$today}.
 - duplicado = true se o item descreve o mesmo ato de um item já publicado (lista abaixo) ou de um item anterior deste lote.
 - confianca: 0 a 100, o quanto você tem certeza de que o item é relevante e de que os dados estão corretos.
