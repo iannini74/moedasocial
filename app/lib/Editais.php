@@ -62,9 +62,10 @@ final class Editais
 
     /**
      * Versão das regras de análise. Ao mudar as regras, aumente o número: os itens
-     * descartados nos últimos 60 dias (exceto PNCP) voltam uma vez para a fila.
+     * descartados nos últimos 60 dias (exceto PNCP) voltam uma vez para a fila
+     * e a pesquisa na web é refeita.
      */
-    private const RULES_VERSION = 2;
+    private const RULES_VERSION = 3;
 
     private static function reprocessIfRulesChanged(): void
     {
@@ -72,6 +73,7 @@ final class Editais
             return;
         }
         Db::run("UPDATE editais SET status = 'novo' WHERE status = 'descartado' AND source <> 'PNCP' AND created_at > ?", [time() - 60 * 86400]);
+        Db::setting('editais_last_web', '0');
         Db::setting('editais_rules', (string) self::RULES_VERSION);
     }
 
@@ -119,11 +121,13 @@ final class Editais
             return;
         }
         $webDue = self::researchEnabled() && time() - (int) Db::setting('editais_last_web') > cfg('editais.refresh_hours', 24) * 3600 - 1800;
+        $webJob = (string) Db::setting('editais_web_job');
         $analysisDue = time() - (int) Db::setting('editais_last_analysis') > 120
             && ((int) Db::setting('editais_rules') < self::RULES_VERSION || Db::value("SELECT id FROM editais WHERE status = 'novo' LIMIT 1"));
         match (true) {
             self::due() => self::withLock(fn() => self::collect()),
-            $webDue => self::withLock(fn() => self::research()),
+            $webJob !== '' && time() - (int) Db::setting('editais_web_poll') > 60 => self::withLock(fn() => self::pollResearch($webJob)),
+            $webDue => self::withLock(fn() => self::startResearch()),
             (bool) $analysisDue => self::withLock(fn() => self::analyze(15)),
             default => null,
         };
@@ -149,14 +153,46 @@ final class Editais
     private static function research(): array
     {
         Db::setting('editais_last_web', (string) time());
-        $first = !Db::value("SELECT id FROM editais WHERE source = 'Pesquisa web' LIMIT 1");
-        $r = EditaisPesquisador::run($first ? 60 : (int) cfg('editais.lookback_days', 10));
+        $r = EditaisPesquisador::run(self::researchDays());
         log_line('editais', 'Pesquisa web: ' . json_encode($r, JSON_UNESCAPED_UNICODE));
         self::saveStatus(function ($st) use ($r) {
             $st['fontes']['web'] = $r;
             return $st;
         });
         return $r;
+    }
+
+    private static function researchDays(): int
+    {
+        return Db::value("SELECT id FROM editais WHERE source = 'Pesquisa web' LIMIT 1") ? (int) cfg('editais.lookback_days', 10) : 60;
+    }
+
+    /** Pela web: inicia a pesquisa em segundo plano na OpenAI. */
+    private static function startResearch(): void
+    {
+        Db::setting('editais_last_web', (string) time());
+        $id = EditaisPesquisador::start(self::researchDays());
+        Db::setting('editais_web_job', $id);
+        Db::setting('editais_web_poll', (string) time());
+        log_line('editais', "Pesquisa web iniciada em segundo plano: $id");
+    }
+
+    /** Pela web: busca o resultado da pesquisa em segundo plano, se já terminou. */
+    private static function pollResearch(string $id): void
+    {
+        Db::setting('editais_web_poll', (string) time());
+        $r = EditaisPesquisador::poll($id, self::researchDays());
+        $started = (int) Db::setting('editais_last_web');
+        if ($r === null && time() - $started < 3 * 3600) {
+            return;   // ainda rodando
+        }
+        $r ??= ['ok' => false, 'encontrados' => 0, 'novos' => 0, 'erro' => 'Pesquisa em segundo plano não terminou em 3 horas.'];
+        Db::setting('editais_web_job', '');
+        log_line('editais', 'Pesquisa web: ' . json_encode($r, JSON_UNESCAPED_UNICODE));
+        self::saveStatus(function ($st) use ($r) {
+            $st['fontes']['web'] = $r;
+            return $st;
+        });
     }
 
     /** Agente de análise, seguido da limpeza e do aviso ao IndexNow. */

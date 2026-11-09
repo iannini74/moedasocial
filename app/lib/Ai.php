@@ -25,7 +25,7 @@ final class Ai
             if (str_starts_with($model, 'gpt-5') || str_starts_with($model, 'o')) {
                 $body['reasoning'] = ['effort' => $effort ?? ($maxTokens < 1000 ? 'low' : cfg('ai.reasoning_effort', 'medium'))];
             }
-            [$code, $res] = self::post(rtrim((string) cfg('ai.openai_base_url', 'https://api.openai.com/v1'), '/') . '/responses', $body);
+            [$code, $res] = self::request('/responses', $body);
             if ($code === 200 && is_array($res)) {
                 self::$lastModel = $model;
                 return $res;
@@ -41,6 +41,16 @@ final class Ai
             log_line($log, "Modelo $model indisponível ($lastError); tentando o próximo.");
         }
         throw new RuntimeException('Erro da API OpenAI — ' . $lastError);
+    }
+
+    /** Consulta uma resposta criada em segundo plano (background: true). */
+    public static function retrieve(string $id): array
+    {
+        [$code, $res] = self::request('/responses/' . rawurlencode($id));
+        if ($code !== 200 || !is_array($res)) {
+            throw new RuntimeException("Erro da API OpenAI — HTTP $code" . (isset($res['error']['message']) ? ': ' . $res['error']['message'] : ''));
+        }
+        return $res;
     }
 
     /** Junta os textos de saída (itens "message" → "output_text"). */
@@ -83,11 +93,11 @@ final class Ai
         return null;
     }
 
-    private static function post(string $url, array $body): array
+    /** POST quando há corpo, GET quando não há. */
+    private static function request(string $path, ?array $body = null): array
     {
-        $ch = curl_init($url);
+        $ch = curl_init(rtrim((string) cfg('ai.openai_base_url', 'https://api.openai.com/v1'), '/') . $path);
         curl_setopt_array($ch, [
-            CURLOPT_POST => true,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_TIMEOUT => 900,
             CURLOPT_CONNECTTIMEOUT => 20,
@@ -95,8 +105,10 @@ final class Ai
                 'Content-Type: application/json',
                 'Authorization: Bearer ' . cfg('ai.openai_api_key'),
             ],
-            CURLOPT_POSTFIELDS => json_encode($body, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
         ]);
+        if ($body !== null) {
+            curl_setopt_array($ch, [CURLOPT_POST => true, CURLOPT_POSTFIELDS => json_encode($body, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)]);
+        }
         $raw = curl_exec($ch);
         $code = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
         $err = curl_error($ch);
