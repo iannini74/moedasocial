@@ -92,8 +92,14 @@ final class Editais
 
     public static function due(): bool
     {
-        $last = (int) (Db::setting('editais_last_run') ?? 0);
-        return time() - $last > cfg('editais.refresh_hours', 24) * 3600 - 1800;
+        return (int) (Db::setting('editais_last_run') ?? 0) < self::slot();
+    }
+
+    /** Início do ciclo diário em vigor: hoje às editais.run_hour, ou ontem, se ainda não chegou a hora. */
+    private static function slot(): int
+    {
+        $slot = strtotime('today ' . (int) cfg('editais.run_hour', 7) . ':00');
+        return time() < $slot ? $slot - 86400 : $slot;
     }
 
     /**
@@ -103,7 +109,7 @@ final class Editais
     public static function run(bool $force = false): array
     {
         if (!$force && !self::due()) {
-            return ['ok' => false, 'msg' => 'Pesquisa já feita nas últimas ' . cfg('editais.refresh_hours') . ' horas.'];
+            return ['ok' => false, 'msg' => 'A pesquisa de hoje já foi feita.'];
         }
         if (self::locked()) {
             return ['ok' => false, 'msg' => 'Uma pesquisa já está em andamento.'];
@@ -133,7 +139,7 @@ final class Editais
         if (self::locked()) {
             return;
         }
-        $webDue = self::researchEnabled() && time() - (int) Db::setting('editais_last_web') > cfg('editais.refresh_hours', 24) * 3600 - 1800;
+        $webDue = self::researchEnabled() && (int) Db::setting('editais_last_web') < self::slot();
         $webJob = (string) Db::setting('editais_web_job');
         $analysisDue = time() - (int) Db::setting('editais_last_analysis') > 120
             && ((int) Db::setting('editais_rules') < self::RULES_VERSION || Db::value('SELECT id FROM editais WHERE ' . self::PENDING . ' LIMIT 1'));

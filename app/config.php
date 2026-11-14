@@ -104,7 +104,7 @@ return [
         // Área restrita: acesso mediante cadastro aprovado e código enviado por e-mail a cada login
         'master_email'    => 'tulio@tribex.com.br',   // sempre aprovado; recebe os avisos de novas solicitações
         'session_hours'   => 12,
-        'refresh_hours'   => 24,
+        'run_hour'        => 7,      // uma pesquisa por dia, a partir desta hora (cron às 7h; sem cron, a primeira visita depois dela)
         'lookback_days'   => 10,     // janela de busca nas execuções diárias
         'first_run_days'  => 90,     // janela da primeira execução
         'min_confidence'  => 70,     // abaixo disso o item vai para revisão no painel

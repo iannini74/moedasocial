@@ -46,7 +46,7 @@ hPanel → **Avançado → Cron Jobs → Personalizado**. Troque `SEU_USUARIO` p
 | `30 9 * * *` | `php /home/SEU_USUARIO/domains/moedasocial.com/public_html/cron/run.php blog` | Verifica diariamente; publica um artigo a cada 15 dias e avisa os inscritos |
 | `15 * * * *` | `php /home/SEU_USUARIO/domains/moedasocial.com/public_html/cron/run.php newsletter` | Continua envios da newsletter em lotes (limite do SMTP) |
 | `0 4 * * 0` | `php /home/SEU_USUARIO/domains/moedasocial.com/public_html/cron/run.php manutencao` | Limpeza conforme a política de retenção (LGPD) |
-| `0 7 * * *` | `php /home/SEU_USUARIO/domains/moedasocial.com/public_html/cron/run.php editais` | Agentes de editais: coleta (PNCP, diários oficiais, imprensa), pesquisa na web e análise com a OpenAI |
+| `0 7 * * *` | `php /home/SEU_USUARIO/domains/moedasocial.com/public_html/cron/run.php editais` | Agentes de editais: coleta (PNCP, diários oficiais, imprensa), pesquisa na web e análise com a OpenAI. Uma vez por dia a partir de `editais.run_hour` (7h); sem cron, a primeira visita depois dessa hora inicia a pesquisa |
 
 Contingência: mesmo sem cron, as notícias se atualizam sozinhas a cada 6 horas no primeiro acesso após o vencimento. Também é possível disparar por URL: `https://moedasocial.com/cron/SEU_CRON_TOKEN/news`.
 
